@@ -1,0 +1,20 @@
+{
+  "name": "jwellers-edith-app",
+  "version": "1.0.0",
+  "description": "Jwellers Edith Smart Action Mobile Companion Application",
+  "main": "App.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node ../tests/mobile_sync.test.js"
+  },
+  "keywords": [
+    "jewellery",
+    "mobile",
+    "companion",
+    "khata",
+    "girvi",
+    "sync"
+  ],
+  "author": "Jwellers Edith",
+  "license": "ISC"
+}

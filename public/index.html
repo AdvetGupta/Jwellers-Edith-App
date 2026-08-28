@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#c59b27">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Jwellers Edith Mobile Companion</title>
+  <link rel="stylesheet" href="../src/styles/mobile.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    // Browser bundle adapter
+    const module = { exports: {} };
+    function require(path) {
+      if (path.includes('i18n')) return window.MobileI18N_Module || module.exports;
+      if (path.includes('storage')) return window.MobileStorage_Module || module.exports;
+      if (path.includes('whatsapp')) return window.WhatsAppService_Module || module.exports;
+      if (path.includes('upi')) return window.UpiService_Module || module.exports;
+      if (path.includes('driveSync')) return window.MobileDriveSync_Module || module.exports;
+      if (path.includes('DashboardScreen')) return window.DashboardScreen_Module || module.exports;
+      if (path.includes('KhataScreen')) return window.KhataScreen_Module || module.exports;
+      if (path.includes('GirviScreen')) return window.GirviScreen_Module || module.exports;
+      if (path.includes('CustomerScreen')) return window.CustomerScreen_Module || module.exports;
+      if (path.includes('PairingScreen')) return window.PairingScreen_Module || module.exports;
+      if (path.includes('SettingsScreen')) return window.SettingsScreen_Module || module.exports;
+      return module.exports;
+    }
+  </script>
+
+  <script src="../src/services/i18n.js"></script>
+  <script>window.MobileI18N_Module = module.exports;</script>
+
+  <script src="../src/services/storage.js"></script>
+  <script>window.MobileStorage_Module = module.exports;</script>
+
+  <script src="../src/services/whatsapp.js"></script>
+  <script>window.WhatsAppService_Module = module.exports;</script>
+
+  <script src="../src/services/upi.js"></script>
+  <script>window.UpiService_Module = module.exports;</script>
+
+  <script src="../src/services/driveSync.js"></script>
+  <script>window.MobileDriveSync_Module = module.exports;</script>
+
+  <script src="../src/screens/DashboardScreen.js"></script>
+  <script>window.DashboardScreen_Module = module.exports;</script>
+
+  <script src="../src/screens/KhataScreen.js"></script>
+  <script>window.KhataScreen_Module = module.exports;</script>
+
+  <script src="../src/screens/GirviScreen.js"></script>
+  <script>window.GirviScreen_Module = module.exports;</script>
+
+  <script src="../src/screens/CustomerScreen.js"></script>
+  <script>window.CustomerScreen_Module = module.exports;</script>
+
+  <script src="../src/screens/PairingScreen.js"></script>
+  <script>window.PairingScreen_Module = module.exports;</script>
+
+  <script src="../src/screens/SettingsScreen.js"></script>
+  <script>window.SettingsScreen_Module = module.exports;</script>
+
+  <script src="../App.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      MobileApp.init();
+    });
+  </script>
+</body>
+</html>
