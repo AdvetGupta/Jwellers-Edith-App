@@ -28,7 +28,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
     body { background: #e2e8f0; color: var(--text-main); margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; }
     
-    /* Device Frame Simulator on Desktop */
     #mobile-frame {
       width: 100%;
       max-width: 440px;
@@ -41,7 +40,6 @@
       padding-bottom: 75px;
     }
 
-    /* Top Sticky Navigation Bar */
     .app-header {
       position: sticky; top: 0;
       background: var(--bg-card);
@@ -57,17 +55,12 @@
       display: flex; align-items: center; gap: 6px; cursor: pointer;
       background: #e6fffa; color: #234e52; border: 1px solid #b2f5ea;
     }
-    .sync-status-pill.syncing { background: #feebc8; color: #7b341e; border-color: #fbd38d; }
     .sync-status-pill.unpaired { background: #edf2f7; color: #4a5568; border-color: #cbd5e0; }
     .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); }
-    .syncing .dot { background: var(--warning); animation: pulse 1s infinite; }
     .unpaired .dot { background: var(--text-muted); }
-    @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
 
-    /* Content Area */
     .app-content { padding: 16px; flex: 1; overflow-y: auto; }
 
-    /* Bottom Navigation Bar */
     .bottom-nav {
       position: fixed; bottom: 0; width: 100%; max-width: 440px;
       background: var(--bg-card); border-top: 1px solid var(--border);
@@ -82,7 +75,6 @@
     .nav-btn.active { color: var(--primary-dark); }
     .nav-btn .icon { font-size: 20px; }
 
-    /* Cards & Components */
     .card {
       background: var(--bg-card); border-radius: var(--radius);
       padding: 16px; margin-bottom: 14px; border: 1px solid var(--border);
@@ -96,7 +88,6 @@
     .stat-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
     .stat-num { font-size: 20px; font-weight: 800; margin-top: 4px; }
 
-    /* Buttons & Form Elements */
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
       gap: 6px; padding: 10px 16px; border-radius: 10px; font-size: 13px;
@@ -107,6 +98,7 @@
     .btn-secondary { background: var(--bg-app); color: var(--text-main); border: 1px solid var(--border); }
     .btn-whatsapp { background: #25d366; color: #fff; }
     .btn-success { background: var(--success); color: #fff; }
+    .btn-danger { background: var(--danger); color: #fff; }
     .btn-block { width: 100%; padding: 12px; font-size: 14px; }
     .search-input {
       width: 100%; padding: 12px 14px 12px 38px; border-radius: 10px;
@@ -114,7 +106,6 @@
     }
     .search-input:focus { border-color: var(--primary); }
 
-    /* Modals & Overlays */
     .modal-backdrop {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0,0,0,0.6); display: flex; align-items: flex-end; justify-content: center;
@@ -128,7 +119,6 @@
     }
     @keyframes slideIn { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-    /* Onboarding & Wizard */
     .wizard-step { text-align: center; padding: 20px 0; }
     .wizard-icon { font-size: 54px; margin-bottom: 12px; }
     .wizard-title { font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 6px; }
@@ -136,16 +126,17 @@
     .step-pill { display: inline-block; padding: 4px 12px; border-radius: 12px; background: var(--primary-light); color: var(--primary-dark); font-size: 11px; font-weight: 800; margin-bottom: 14px; }
     .progress-track { height: 6px; background: var(--border); border-radius: 4px; overflow: hidden; margin: 16px 0; }
     .progress-bar { height: 100%; background: var(--success); width: 0%; transition: width 0.4s ease; }
+
+    .badge-jama { background: #e8f8f5; color: #27ae60; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+    .badge-bill { background: #feebc8; color: #c05621; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
   </style>
 </head>
 <body>
-  <div id="mobile-frame">
-    <!-- Rendered via MobileApp -->
-  </div>
+  <div id="mobile-frame"></div>
   <div id="modal-host"></div>
 
   <script>
-    // --- State & Mock Store ---
+    // --- Master Mobile State & Realistic Jewel Store Ledger ---
     const State = {
       isPaired: false,
       isDemoMode: false,
@@ -157,16 +148,84 @@
       currentScreen: 'dashboard',
       lang: 'en',
       khataList: [
-        { id: 1, name: 'Ramesh Patel', phone: '9822112233', city: 'Indapur', dues: 18500 },
-        { id: 2, name: 'Sunita Sharma', phone: '9833445566', city: 'Baramati', dues: 24000 },
-        { id: 3, name: 'Anand Kumar', phone: '9844556677', city: 'Pune', dues: 9200 },
-        { id: 4, name: 'Vijay Deshmukh', phone: '9855667788', city: 'Phaltan', dues: 45000 },
-        { id: 5, name: 'Sanjay Sonawane', phone: '9866778899', city: 'Daund', dues: 12800 }
+        {
+          id: 1, name: 'Ramesh Patel', phone: '9822112233', city: 'Indapur', dues: 18500,
+          totalPurchases: 145000, totalJama: 126500,
+          bills: [
+            { invoiceNo: 'INV-2026-084', date: '2026-08-10', items: 'Gold Chain 22K (18.5g)', amount: 125000, payment: 'Partial' },
+            { invoiceNo: 'INV-2026-092', date: '2026-08-18', items: 'Silver Coin (50g)', amount: 20000, payment: 'Credit' }
+          ],
+          jamaHistory: [
+            { date: '2026-08-10', amount: 80000, mode: 'Cash', note: 'Advance at purchase' },
+            { date: '2026-08-20', amount: 30000, mode: 'UPI (GPay)', note: 'Bank transfer' },
+            { date: '2026-08-26', amount: 16500, mode: 'Cash', note: 'Last counter payment' }
+          ]
+        },
+        {
+          id: 2, name: 'Sunita Sharma', phone: '9833445566', city: 'Baramati', dues: 24000,
+          totalPurchases: 85000, totalJama: 61000,
+          bills: [
+            { invoiceNo: 'INV-2026-061', date: '2026-07-25', items: 'Gold Ring 22K (4.2g) + Silver Payal', amount: 85000, payment: 'Partial' }
+          ],
+          jamaHistory: [
+            { date: '2026-07-25', amount: 50000, mode: 'Cash', note: 'On booking' },
+            { date: '2026-08-12', amount: 11000, mode: 'UPI (PhonePe)', note: 'Partial clearing' }
+          ]
+        },
+        {
+          id: 3, name: 'Anand Kumar', phone: '9844556677', city: 'Pune', dues: 9200,
+          totalPurchases: 54000, totalJama: 44800,
+          bills: [
+            { invoiceNo: 'INV-2026-072', date: '2026-08-05', items: 'Gold Nose Pin & Silver Utensils', amount: 54000, payment: 'Partial' }
+          ],
+          jamaHistory: [
+            { date: '2026-08-05', amount: 35000, mode: 'Cash', note: 'Initial payment' },
+            { date: '2026-08-22', amount: 9800, mode: 'Cash', note: 'Second installment' }
+          ]
+        },
+        {
+          id: 4, name: 'Vijay Deshmukh', phone: '9855667788', city: 'Phaltan', dues: 45000,
+          totalPurchases: 220000, totalJama: 175000,
+          bills: [
+            { invoiceNo: 'INV-2026-045', date: '2026-06-15', items: 'Bridal Gold Necklace Set 22K (32g)', amount: 220000, payment: 'Credit' }
+          ],
+          jamaHistory: [
+            { date: '2026-06-15', amount: 100000, mode: 'RTGS / Bank', note: 'Advance' },
+            { date: '2026-07-10', amount: 50000, mode: 'Cash', note: 'Post wedding payment' },
+            { date: '2026-08-14', amount: 25000, mode: 'UPI (Paytm)', note: 'Installment' }
+          ]
+        }
       ],
       girviList: [
-        { id: 1, loan_number: 'GIR-1001', customer_name: 'Ramesh Patel', father_husband_name: 'Dattatray', phone1: '9822112233', address: 'Indapur', item_name: 'Gold Chain 22K', metal_type: 'gold', gold_weight: 18.5, silver_weight: 0, principal_amount: 55000, monthly_interest_percent: 2.0, loan_date: '2026-06-10', reference_person: 'Suresh Sheth' },
-        { id: 2, loan_number: 'GIR-1002', customer_name: 'Sunita Sharma', father_husband_name: 'Jagdish', phone1: '9833445566', address: 'Baramati', item_name: 'Silver Payal 92.5%', metal_type: 'silver', gold_weight: 0, silver_weight: 250, principal_amount: 14000, monthly_interest_percent: 2.5, loan_date: '2026-07-01' },
-        { id: 3, loan_number: 'GIR-1003', customer_name: 'Vijay Deshmukh', father_husband_name: 'Baburao', phone1: '9855667788', address: 'Phaltan', item_name: 'Gold Bangles (2)', metal_type: 'gold', gold_weight: 32.0, silver_weight: 0, principal_amount: 95000, monthly_interest_percent: 1.5, loan_date: '2026-05-15', reference_person: 'Maheshbhai' }
+        {
+          id: 1, loan_number: 'GIR-1001', customer_name: 'Ramesh Patel', father_husband_name: 'Dattatray',
+          phone1: '9822112233', address: 'Indapur, Pune', item_name: 'Gold Chain 22K', metal_type: 'gold',
+          gold_weight: 18.5, silver_weight: 0, principal_amount: 55000, monthly_interest_percent: 2.0,
+          loan_date: '2026-06-10', reference_person: 'Suresh Sheth', notes: 'Pledged in original box',
+          accruedDays: 80, accruedInterest: 2933, totalDues: 57933,
+          payments: [
+            { date: '2026-07-10', amount: 1100, type: 'interest_payment', mode: 'Cash', note: '1 month interest' }
+          ]
+        },
+        {
+          id: 2, loan_number: 'GIR-1002', customer_name: 'Sunita Sharma', father_husband_name: 'Jagdish',
+          phone1: '9833445566', address: 'Baramati, Pune', item_name: 'Silver Payal 92.5%', metal_type: 'silver',
+          gold_weight: 0, silver_weight: 250, principal_amount: 14000, monthly_interest_percent: 2.5,
+          loan_date: '2026-07-01', reference_person: 'Govind Jewellers', notes: 'Pair of anklets with bells',
+          accruedDays: 59, accruedInterest: 688, totalDues: 14688,
+          payments: []
+        },
+        {
+          id: 3, loan_number: 'GIR-1003', customer_name: 'Vijay Deshmukh', father_husband_name: 'Baburao',
+          phone1: '9855667788', address: 'Phaltan, Satara', item_name: 'Gold Bangles (2)', metal_type: 'gold',
+          gold_weight: 32.0, silver_weight: 0, principal_amount: 95000, monthly_interest_percent: 1.5,
+          loan_date: '2026-05-15', reference_person: 'Maheshbhai', notes: 'Hallmarked 916 KDM',
+          accruedDays: 106, accruedInterest: 5035, totalDues: 100035,
+          payments: [
+            { date: '2026-06-15', amount: 1425, type: 'interest_payment', mode: 'UPI', note: 'May-June interest' },
+            { date: '2026-07-15', amount: 1425, type: 'interest_payment', mode: 'Cash', note: 'June-July interest' }
+          ]
+        }
       ],
       customers: [
         { id: 1, name: 'Ramesh Patel', phone: '9822112233', city: 'Indapur', balance: 18500 },
@@ -176,7 +235,7 @@
       ]
     };
 
-    // --- Translations (I18N) ---
+    // --- Bilingual Dictionary ---
     const I18N = {
       t(k) {
         const dict = {
@@ -187,7 +246,7 @@
             activeKhataDues: "Active Khata Dues", activeGirvi: "Active Girvi",
             goldPledged: "Gold Pledged", silverPledged: "Silver Pledged",
             searchKhata: "Search customer or balance...", searchGirvi: "Search Girvi #, name, phone...",
-            whatsappReminder: "WhatsApp", upiQr: "UPI QR", details: "Details", photo: "Photo"
+            whatsappReminder: "WhatsApp", upiQr: "UPI QR", details: "Passbook", pay: "Pay", photo: "Photo"
           },
           hi: {
             appName: "ज्वेलर्स एडिथ", dashboard: "डैशबोर्ड", khata: "खाता", girvi: "गिरवी",
@@ -196,26 +255,22 @@
             activeKhataDues: "कुल खाता बकाया", activeGirvi: "सक्रिय गिरवी",
             goldPledged: "जमा सोना (ग्राम)", silverPledged: "जमा चांदी (ग्राम)",
             searchKhata: "ग्राहक या फोन नंबर खोजें...", searchGirvi: "गिरवी नं., नाम, फोन खोजें...",
-            whatsappReminder: "व्हाट्सएप", upiQr: "UPI QR", details: "विवरण", photo: "फोटो"
+            whatsappReminder: "व्हाट्सएप", upiQr: "UPI QR", details: "पासबुक", pay: "जमा लें", photo: "फोटो"
           }
         };
-        return dict[State.lang][k] || k;
+        return (dict[State.lang] && dict[State.lang][k]) || k;
       }
     };
 
-    // --- Main App Coordinator ---
+    // --- Mobile Application Coordinator ---
     const MobileApp = {
       _wizardStep: 1,
       _searchFilter: '',
 
       init() {
-        // Check saved storage
         try {
           const saved = localStorage.getItem('je_mobile_state');
-          if (saved) {
-            const parsed = JSON.parse(saved);
-            Object.assign(State, parsed);
-          }
+          if (saved) Object.assign(State, JSON.parse(saved));
         } catch(e) {}
         this.render();
       },
@@ -244,14 +299,12 @@
         const frame = document.getElementById('mobile-frame');
         if (!frame) return;
 
-        // If not paired and not in demo mode, show the Step-by-Step Onboarding Setup Wizard!
         if (!State.isPaired && !State.isDemoMode) {
           frame.innerHTML = this._renderOnboardingWizard();
           return;
         }
 
         frame.innerHTML = `
-          <!-- Sticky Header -->
           <header class="app-header">
             <div class="app-logo">
               <span>💍</span> ${I18N.t('appName')}
@@ -262,12 +315,10 @@
             </div>
           </header>
 
-          <!-- Main Screen View -->
           <main class="app-content">
             ${this._renderScreenContent()}
           </main>
 
-          <!-- Bottom Floating Bar -->
           <nav class="bottom-nav">
             <button class="nav-btn ${State.currentScreen === 'dashboard' ? 'active' : ''}" onclick="MobileApp.navigate('dashboard')">
               <span class="icon">◉</span><span>${I18N.t('dashboard')}</span>
@@ -288,7 +339,6 @@
         `;
       },
 
-      // --- Screen Renderers ---
       _renderScreenContent() {
         switch(State.currentScreen) {
           case 'khata': return this._renderKhata();
@@ -306,7 +356,6 @@
         const silverWt = State.girviList.reduce((s, g) => s + (g.silver_weight || 0), 0);
 
         return `
-          <!-- Metal Ticker -->
           <div class="card" style="background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%); border-left: 4px solid var(--primary);">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <div>
@@ -320,7 +369,6 @@
             </div>
           </div>
 
-          <!-- 4 Core Business KPIs -->
           <div class="stat-grid">
             <div class="stat-card" onclick="MobileApp.navigate('khata')" style="cursor:pointer;">
               <div class="stat-label">${I18N.t('activeKhataDues')}</div>
@@ -344,7 +392,6 @@
             </div>
           </div>
 
-          <!-- Sync Overview Banner -->
           <div class="card" style="border: 1px dashed var(--border); display:flex; justify-content:space-between; align-items:center;">
             <div>
               <div style="font-weight:700; font-size:13px;">☁️ Google Drive Free Sync</div>
@@ -359,6 +406,7 @@
         `;
       },
 
+      // --- Rich Khata Passbook Screen ---
       _renderKhata() {
         const q = this._searchFilter.toLowerCase();
         const filtered = State.khataList.filter(c => !q || c.name.toLowerCase().includes(q) || c.phone.includes(q) || c.city.toLowerCase().includes(q));
@@ -369,27 +417,126 @@
             <input type="text" class="search-input" placeholder="${I18N.t('searchKhata')}" value="${this._searchFilter}" oninput="MobileApp._searchFilter = this.value; MobileApp.render();">
           </div>
 
-          ${filtered.map(c => `
-            <div class="card" style="border-left: 4px solid var(--danger);">
-              <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                <div>
-                  <div style="font-weight:700; font-size:15px;">${c.name}</div>
-                  <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">📍 ${c.city} • 📞 ${c.phone}</div>
+          ${filtered.map(c => {
+            const lastJama = c.jamaHistory && c.jamaHistory.length > 0 ? c.jamaHistory[c.jamaHistory.length - 1] : null;
+            return `
+              <div class="card" style="border-left: 4px solid var(--danger); cursor:pointer;" onclick="MobileApp.openKhataPassbook(${c.id})">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                  <div>
+                    <div style="font-weight:700; font-size:15px;">${c.name}</div>
+                    <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">📍 ${c.city} • 📞 ${c.phone}</div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="font-size:11px; font-weight:700; color:var(--text-muted);">PENDING DUES</div>
+                    <div style="font-size:18px; font-weight:800; color:var(--danger); margin-top:2px;">₹${c.dues.toLocaleString('en-IN')}</div>
+                  </div>
                 </div>
-                <div style="text-align:right;">
-                  <div style="font-size:11px; font-weight:700; color:var(--text-muted);">PENDING DUES</div>
-                  <div style="font-size:18px; font-weight:800; color:var(--danger); margin-top:2px;">₹${c.dues.toLocaleString('en-IN')}</div>
+
+                <div style="background:var(--bg-app); padding:8px 12px; border-radius:8px; margin-top:10px; font-size:12px; display:flex; justify-content:space-between;">
+                  <span>🛒 Purchases: <strong>₹${(c.totalPurchases || 0).toLocaleString('en-IN')}</strong></span>
+                  <span>💰 Total Jama: <strong>₹${(c.totalJama || 0).toLocaleString('en-IN')}</strong></span>
+                </div>
+
+                ${lastJama ? `
+                  <div style="font-size:11px; color:var(--text-muted); margin-top:6px;">
+                    Last Jama: <strong style="color:var(--success);">₹${lastJama.amount.toLocaleString('en-IN')} (${lastJama.mode})</strong> on ${lastJama.date}
+                  </div>
+                ` : ''}
+
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-top:12px; border-top:1px solid var(--border); padding-top:10px;" onclick="event.stopPropagation()">
+                  <button class="btn btn-secondary" style="font-size:11px; padding:7px;" onclick="MobileApp.openKhataPassbook(${c.id})">
+                    📖 ${I18N.t('details')}
+                  </button>
+                  <button class="btn btn-whatsapp" style="font-size:11px; padding:7px;" onclick="MobileApp.sendWhatsApp('${c.phone}', '${c.name}', ${c.dues})">
+                    📲 ${I18N.t('whatsappReminder')}
+                  </button>
+                  <button class="btn btn-primary" style="font-size:11px; padding:7px;" onclick="MobileApp.showUpiQr('${c.name}', ${c.dues})">
+                    💳 ${I18N.t('upiQr')}
+                  </button>
                 </div>
               </div>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; border-top:1px solid var(--border); padding-top:10px;">
-                <button class="btn btn-whatsapp" onclick="MobileApp.sendWhatsApp('${c.phone}', '${c.name}', ${c.dues})">📲 ${I18N.t('whatsappReminder')}</button>
-                <button class="btn btn-primary" onclick="MobileApp.showUpiQr('${c.name}', ${c.dues})">💳 ${I18N.t('upiQr')}</button>
-              </div>
-            </div>
-          `).join('')}
+            `;
+          }).join('')}
         `;
       },
 
+      openKhataPassbook(custId) {
+        const c = State.khataList.find(x => x.id === custId);
+        if (!c) return;
+
+        const modalHtml = `
+          <div class="modal-backdrop" id="khata-modal" onclick="document.getElementById('khata-modal').remove()">
+            <div class="modal-sheet" onclick="event.stopPropagation()">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div>
+                  <h3 style="font-size:17px; font-weight:800;">📖 Customer Khata Passbook</h3>
+                  <div style="font-size:13px; color:var(--text-muted);">${c.name} • 📞 ${c.phone}</div>
+                </div>
+                <button class="btn btn-sm btn-secondary" onclick="document.getElementById('khata-modal').remove()">✕</button>
+              </div>
+
+              <!-- Summary Card -->
+              <div class="card" style="background:var(--bg-app); border:1px solid var(--border); margin-bottom:14px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                  <span style="font-size:13px; color:var(--text-muted);">Total Invoices/Bill:</span>
+                  <strong>₹${(c.totalPurchases || 0).toLocaleString('en-IN')}</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                  <span style="font-size:13px; color:var(--text-muted);">Total Jama (Paid):</span>
+                  <strong style="color:var(--success);">₹${(c.totalJama || 0).toLocaleString('en-IN')}</strong>
+                </div>
+                <hr style="margin:8px 0; border:0; border-top:1px solid var(--border);" />
+                <div style="display:flex; justify-content:space-between;">
+                  <span style="font-weight:700; font-size:14px;">Net Outstanding Dues:</span>
+                  <strong style="color:var(--danger); font-size:16px;">₹${c.dues.toLocaleString('en-IN')}</strong>
+                </div>
+              </div>
+
+              <!-- Bill / Invoice History -->
+              <div style="font-weight:800; font-size:13px; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px;">
+                🛒 Invoices / Bills (${c.bills ? c.bills.length : 0})
+              </div>
+              ${c.bills && c.bills.length > 0 ? c.bills.map(b => `
+                <div style="background:var(--bg-card); padding:10px 12px; border-radius:8px; border:1px solid var(--border); margin-bottom:8px; font-size:13px;">
+                  <div style="display:flex; justify-content:space-between; font-weight:700;">
+                    <span>${b.invoiceNo}</span>
+                    <span style="color:var(--primary-dark);">₹${b.amount.toLocaleString('en-IN')}</span>
+                  </div>
+                  <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">${b.items} • 📅 ${b.date}</div>
+                </div>
+              `).join('') : '<div style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">No bill records</div>'}
+
+              <!-- Jama / Payment History -->
+              <div style="font-weight:800; font-size:13px; text-transform:uppercase; color:var(--text-muted); margin-top:14px; margin-bottom:8px;">
+                💰 Jama (Payment) History (${c.jamaHistory ? c.jamaHistory.length : 0})
+              </div>
+              ${c.jamaHistory && c.jamaHistory.length > 0 ? c.jamaHistory.map(j => `
+                <div style="background:var(--bg-card); padding:10px 12px; border-radius:8px; border:1px solid var(--border); margin-bottom:8px; font-size:13px;">
+                  <div style="display:flex; justify-content:space-between;">
+                    <span style="font-weight:700; color:var(--success);">+ ₹${j.amount.toLocaleString('en-IN')} (${j.mode})</span>
+                    <span style="font-size:12px; color:var(--text-muted);">📅 ${j.date}</span>
+                  </div>
+                  ${j.note ? `<div style="font-size:12px; color:var(--text-muted); margin-top:2px;">📝 ${j.note}</div>` : ''}
+                </div>
+              `).join('') : '<div style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">No payments recorded</div>'}
+
+              <!-- Action Bar -->
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:16px;">
+                <button class="btn btn-whatsapp" onclick="MobileApp.sendWhatsApp('${c.phone}', '${c.name}', ${c.dues})">
+                  📲 Send Statement
+                </button>
+                <button class="btn btn-primary" onclick="MobileApp.showUpiQr('${c.name}', ${c.dues})">
+                  💳 Generate UPI QR
+                </button>
+              </div>
+              <button class="btn btn-secondary btn-block" style="margin-top:8px;" onclick="document.getElementById('khata-modal').remove()">Close</button>
+            </div>
+          </div>
+        `;
+        document.getElementById('modal-host').innerHTML = modalHtml;
+      },
+
+      // --- Rich Girvi Screen & Actions ---
       _renderGirvi() {
         const q = this._searchFilter.toLowerCase();
         const filtered = State.girviList.filter(g => !q || g.loan_number.toLowerCase().includes(q) || g.customer_name.toLowerCase().includes(q) || g.phone1.includes(q) || g.address.toLowerCase().includes(q));
@@ -406,7 +553,7 @@
               <div class="card" style="border-left: 4px solid var(--primary);">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                   <div>
-                    <div style="font-size:12px; font-weight:700; color:var(--primary);">${g.loan_number}</div>
+                    <div style="font-size:12px; font-weight:800; color:var(--primary-dark);">${g.loan_number}</div>
                     <div style="font-weight:700; font-size:15px; margin-top:2px;">${g.customer_name}</div>
                     <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">📍 ${g.address} • 📞 ${g.phone1}</div>
                   </div>
@@ -417,21 +564,177 @@
                   </div>
                 </div>
 
-                <div style="background:var(--bg-app); padding:8px 12px; border-radius:8px; margin-top:10px; font-size:13px; display:flex; justify-content:space-between;">
+                <div style="background:var(--bg-app); padding:8px 12px; border-radius:8px; margin-top:10px; font-size:13px; display:flex; justify-content:space-between; align-items:center;">
                   <span>💎 <strong>${g.item_name}</strong></span>
                   <span>⚖️ <strong>${wt}</strong></span>
                 </div>
 
-                ${g.reference_person ? `<div style="font-size:12px; color:var(--text-muted); margin-top:6px;">🤝 Reference: <strong>${g.reference_person}</strong></div>` : ''}
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-top:8px; color:var(--text-muted);">
+                  <span>⏳ Elapsed: <strong>${g.accruedDays || 60} days</strong></span>
+                  <span>Interest Dues: <strong style="color:var(--danger);">₹${(g.accruedInterest || 0).toLocaleString('en-IN')}</strong></span>
+                </div>
 
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px;">
-                  <button class="btn btn-secondary" onclick="MobileApp.attachPhoto('${g.loan_number}')">📸 ${I18N.t('photo')}</button>
-                  <button class="btn btn-primary" onclick="MobileApp.viewGirvi('${g.loan_number}')">👁️ ${I18N.t('details')}</button>
+                ${g.reference_person ? `<div style="font-size:12px; color:var(--text-muted); margin-top:4px;">🤝 Reference: <strong>${g.reference_person}</strong></div>` : ''}
+
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:6px; margin-top:12px; border-top:1px solid var(--border); padding-top:10px;">
+                  <button class="btn btn-secondary" style="font-size:11px; padding:6px;" onclick="MobileApp.viewGirvi('${g.loan_number}')">
+                    👁️ ${I18N.t('details')}
+                  </button>
+                  <button class="btn btn-primary" style="font-size:11px; padding:6px;" onclick="MobileApp.openGirviPayModal('${g.loan_number}')">
+                    💳 ${I18N.t('pay')}
+                  </button>
+                  <button class="btn btn-secondary" style="font-size:11px; padding:6px;" onclick="MobileApp.attachPhoto('${g.loan_number}')">
+                    📸 ${I18N.t('photo')}
+                  </button>
+                  <button class="btn btn-whatsapp" style="font-size:11px; padding:6px;" onclick="MobileApp.sendGirviWhatsApp('${g.phone1}', '${g.customer_name}', '${g.loan_number}', ${g.totalDues || g.principal_amount})">
+                    📲 WA
+                  </button>
                 </div>
               </div>
             `;
           }).join('')}
         `;
+      },
+
+      viewGirvi(loanNo) {
+        const g = State.girviList.find(x => x.loan_number === loanNo);
+        if (!g) return;
+
+        const modalHtml = `
+          <div class="modal-backdrop" id="girvi-modal" onclick="document.getElementById('girvi-modal').remove()">
+            <div class="modal-sheet" onclick="event.stopPropagation()">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <h3 style="font-size:17px; font-weight:800;">💍 Girvi Ticket #${g.loan_number}</h3>
+                <button class="btn btn-sm btn-secondary" onclick="document.getElementById('girvi-modal').remove()">✕</button>
+              </div>
+              <div style="padding:10px 0; font-size:14px; line-height:1.7;">
+                <div><strong>Customer:</strong> ${g.customer_name}</div>
+                ${g.father_husband_name ? `<div><strong>Relation:</strong> S/o ${g.father_husband_name}</div>` : ''}
+                <div><strong>Mobile:</strong> ${g.phone1}</div>
+                <div><strong>Village/Address:</strong> ${g.address}</div>
+                <hr style="margin:10px 0; border:0; border-top:1px solid var(--border);" />
+                <div><strong>Ornament Description:</strong> ${g.item_name}</div>
+                <div><strong>Metal Type:</strong> ${g.metal_type.toUpperCase()}</div>
+                <div><strong>Gold Weight:</strong> ${g.gold_weight} gms</div>
+                <div><strong>Silver Weight:</strong> ${g.silver_weight} gms</div>
+                <div><strong>Principal Loan (Rakam):</strong> ₹${g.principal_amount.toLocaleString('en-IN')}</div>
+                <div><strong>Monthly Interest Rate:</strong> ${g.monthly_interest_percent}% /mo</div>
+                <div><strong>Pledge Date:</strong> ${g.loan_date}</div>
+                <div><strong>Accrued Days:</strong> ${g.accruedDays || 60} days</div>
+                <div><strong>Accrued Interest:</strong> <span style="color:var(--danger); font-weight:700;">₹${(g.accruedInterest || 0).toLocaleString('en-IN')}</span></div>
+                <div><strong>Total Outstanding Balance:</strong> <span style="color:var(--primary); font-weight:800;">₹${(g.totalDues || g.principal_amount).toLocaleString('en-IN')}</span></div>
+                ${g.reference_person ? `<div><strong>Reference Person:</strong> ${g.reference_person}</div>` : ''}
+                ${g.notes ? `<div><strong>Remarks / Notes:</strong> ${g.notes}</div>` : ''}
+              </div>
+
+              <!-- Payment History on Pledge -->
+              ${g.payments && g.payments.length > 0 ? `
+                <div style="font-weight:800; font-size:12px; color:var(--text-muted); text-transform:uppercase; margin-top:8px; margin-bottom:6px;">
+                  Payment History on this Pledge
+                </div>
+                ${g.payments.map(p => `
+                  <div style="background:var(--bg-app); padding:8px 10px; border-radius:6px; font-size:12px; margin-bottom:4px; display:flex; justify-content:space-between;">
+                    <span>+ ₹${p.amount.toLocaleString('en-IN')} (${p.mode})</span>
+                    <span>📅 ${p.date}</span>
+                  </div>
+                `).join('')}
+              ` : ''}
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:16px;">
+                <button class="btn btn-primary" onclick="document.getElementById('girvi-modal').remove(); MobileApp.openGirviPayModal('${g.loan_number}');">
+                  💳 Record Payment
+                </button>
+                <button class="btn btn-secondary" onclick="MobileApp.attachPhoto('${g.loan_number}')">
+                  📸 Attach Photo
+                </button>
+              </div>
+              <button class="btn btn-secondary btn-block" style="margin-top:8px;" onclick="document.getElementById('girvi-modal').remove()">Close</button>
+            </div>
+          </div>
+        `;
+        document.getElementById('modal-host').innerHTML = modalHtml;
+      },
+
+      openGirviPayModal(loanNo) {
+        const g = State.girviList.find(x => x.loan_number === loanNo);
+        if (!g) return;
+
+        const modalHtml = `
+          <div class="modal-backdrop" id="girvi-pay-modal" onclick="document.getElementById('girvi-pay-modal').remove()">
+            <div class="modal-sheet" onclick="event.stopPropagation()">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <h3 style="font-size:16px; font-weight:800;">💳 Record Girvi Payment</h3>
+                <button class="btn btn-sm btn-secondary" onclick="document.getElementById('girvi-pay-modal').remove()">✕</button>
+              </div>
+              <div style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">
+                Ticket <strong>#${g.loan_number}</strong> • ${g.customer_name}
+              </div>
+
+              <div style="margin-bottom:12px;">
+                <label style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Payment Amount (₹)</label>
+                <input type="number" id="pay-amount-input" class="search-input" style="padding-left:14px; margin-top:4px; font-size:16px; font-weight:700;" value="${g.accruedInterest || 2000}">
+              </div>
+
+              <div style="margin-bottom:12px;">
+                <label style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Payment Type</label>
+                <select id="pay-type-select" class="search-input" style="padding-left:14px; margin-top:4px;">
+                  <option value="interest_payment">Interest Payment (ब्याज जमा)</option>
+                  <option value="part_payment">Part Principal Payment (मूलधन जमा)</option>
+                  <option value="full_redemption">Full Loan Settlement / Release (छुड़ाना)</option>
+                </select>
+              </div>
+
+              <div style="margin-bottom:16px;">
+                <label style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Payment Mode</label>
+                <select id="pay-mode-select" class="search-input" style="padding-left:14px; margin-top:4px;">
+                  <option value="Cash">Cash (नकद)</option>
+                  <option value="UPI">UPI (GPay / PhonePe / Paytm)</option>
+                  <option value="Bank">Bank Transfer</option>
+                </select>
+              </div>
+
+              <button class="btn btn-success btn-block" style="padding:14px;" onclick="MobileApp.submitGirviPayment('${g.loan_number}')">
+                ✅ Save Payment & Queue for Sync
+              </button>
+              <button class="btn btn-secondary btn-block" style="margin-top:8px;" onclick="document.getElementById('girvi-pay-modal').remove()">
+                Cancel
+              </button>
+            </div>
+          </div>
+        `;
+        document.getElementById('modal-host').innerHTML = modalHtml;
+      },
+
+      submitGirviPayment(loanNo) {
+        const amt = parseFloat(document.getElementById('pay-amount-input')?.value || 0);
+        const mode = document.getElementById('pay-mode-select')?.value || 'Cash';
+        const type = document.getElementById('pay-type-select')?.value || 'interest_payment';
+        const g = State.girviList.find(x => x.loan_number === loanNo);
+        if (g && amt > 0) {
+          if (!g.payments) g.payments = [];
+          g.payments.push({
+            date: new Date().toISOString().split('T')[0],
+            amount: amt,
+            type,
+            mode,
+            note: 'Mobile app counter collection'
+          });
+          if (type === 'interest_payment') {
+            g.accruedInterest = Math.max(0, (g.accruedInterest || 0) - amt);
+          } else {
+            g.principal_amount = Math.max(0, g.principal_amount - amt);
+          }
+          g.totalDues = g.principal_amount + (g.accruedInterest || 0);
+          document.getElementById('girvi-pay-modal')?.remove();
+          alert(`✅ Payment of ₹${amt.toLocaleString('en-IN')} recorded on Ticket #${loanNo} and queued for Google Drive Sync!`);
+          this.render();
+        }
+      },
+
+      sendGirviWhatsApp(phone, name, loanNo, dues) {
+        let msg = `Namaste *${name} ji* 🙏\n\nThis is a statement regarding your Girvi Pledge ticket *#${loanNo}* at *Jwellers Edith*.\n\n• *Total Outstanding Balance:* ₹${Number(dues).toLocaleString('en-IN')}\n\nKindly contact or visit the shop for interest clearance or redemption.\n\nThank you!\n- *Jwellers Edith*`;
+        const p = String(phone).replace(/\D/g, '');
+        window.open(`https://api.whatsapp.com/send?phone=91${p}&text=${encodeURIComponent(msg)}`, '_blank');
       },
 
       _renderCustomers() {
@@ -501,7 +804,6 @@
         `;
       },
 
-      // --- Onboarding & Setup Wizard ---
       _renderOnboardingWizard() {
         let stepHtml = '';
         if (this._wizardStep === 1) {
@@ -589,14 +891,14 @@
 
         setTimeout(() => {
           if (bar) bar.style.width = '75%';
-          if (log) log.innerHTML += '<div>📥 Downloading Khata balances (5 records)...</div><div>📥 Downloading Girvi pledges (3 records)...</div>';
+          if (log) log.innerHTML += '<div>📥 Downloading Khata balances & bills...</div><div>📥 Downloading Girvi pledge tickets...</div>';
         }, 1300);
 
         setTimeout(() => {
           if (bar) bar.style.width = '100%';
           if (title) title.textContent = '🎉 All Synced & Ready!';
           if (desc) desc.textContent = 'Your mobile device is now paired and 100% offline-ready.';
-          if (log) log.innerHTML += '<div style="color:var(--success); font-weight:700;">✅ Handshake Complete! Local cache ready.</div>';
+          if (log) log.innerHTML += '<div style="color:var(--success); font-weight:700;">✅ Handshake Complete! Passbook & Girvi ready.</div>';
           State.isPaired = true;
           State.isDemoMode = false;
           State.lastSyncedAt = new Date().toLocaleTimeString();
@@ -615,7 +917,6 @@
         this.render();
       },
 
-      // --- Modals & Actions ---
       showSyncSheet() {
         const modalHtml = `
           <div class="modal-backdrop" onclick="document.getElementById('sync-sheet').remove()" id="sync-sheet">
@@ -688,39 +989,6 @@
           if (e.target.files[0]) alert(`📸 Photo captured for Ticket #${loanNo} and queued for Google Drive Sync!`);
         };
         input.click();
-      },
-
-      viewGirvi(loanNo) {
-        const g = State.girviList.find(x => x.loan_number === loanNo);
-        if (!g) return;
-
-        const modalHtml = `
-          <div class="modal-backdrop" id="girvi-modal" onclick="document.getElementById('girvi-modal').remove()">
-            <div class="modal-sheet" onclick="event.stopPropagation()">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-                <h3 style="font-size:16px; font-weight:800;">💍 Ticket #${g.loan_number}</h3>
-                <button class="btn btn-sm btn-secondary" onclick="document.getElementById('girvi-modal').remove()">✕</button>
-              </div>
-              <div style="padding:10px 0; font-size:14px; line-height:1.7;">
-                <div><strong>Customer:</strong> ${g.customer_name}</div>
-                ${g.father_husband_name ? `<div><strong>Relation:</strong> S/o ${g.father_husband_name}</div>` : ''}
-                <div><strong>Mobile:</strong> ${g.phone1}</div>
-                <div><strong>Village/Address:</strong> ${g.address}</div>
-                <hr style="margin:10px 0; border:0; border-top:1px solid var(--border);" />
-                <div><strong>Ornament:</strong> ${g.item_name}</div>
-                <div><strong>Metal:</strong> ${g.metal_type.toUpperCase()}</div>
-                <div><strong>Gold Weight:</strong> ${g.gold_weight} gms</div>
-                <div><strong>Silver Weight:</strong> ${g.silver_weight} gms</div>
-                <div><strong>Principal Loan:</strong> ₹${g.principal_amount.toLocaleString('en-IN')}</div>
-                <div><strong>Monthly Interest:</strong> ${g.monthly_interest_percent}% /mo</div>
-                <div><strong>Pledge Date:</strong> ${g.loan_date}</div>
-                ${g.reference_person ? `<div><strong>Reference:</strong> ${g.reference_person}</div>` : ''}
-              </div>
-              <button class="btn btn-secondary btn-block" style="margin-top:16px;" onclick="document.getElementById('girvi-modal').remove()">Close</button>
-            </div>
-          </div>
-        `;
-        document.getElementById('modal-host').innerHTML = modalHtml;
       }
     };
 
