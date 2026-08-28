@@ -47,10 +47,16 @@ const GirviScreen = {
                 </div>
               </div>
 
-              <div style="background:var(--bg-app); padding:8px 12px; border-radius:8px; margin-top:10px; font-size:13px; display:flex; justify-content:space-between;">
+              <div style="background:var(--bg-app); padding:8px 12px; border-radius:8px; margin-top:10px; font-size:13px; display:flex; justify-content:space-between; align-items:center;">
                 <span>💎 <strong>${this._escape(g.item_name)}</strong></span>
                 <span>⚖️ <strong>${wt}</strong></span>
               </div>
+
+              ${g.reference_person ? `
+                <div style="font-size:12px; color:var(--text-muted); margin-top:6px;">
+                  🤝 Reference: <strong>${this._escape(g.reference_person)}</strong>
+                </div>
+              ` : ''}
 
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px;">
                 <button class="btn btn-secondary" onclick="GirviScreen.attachPhoto('${g.id || g.loan_number}')">
