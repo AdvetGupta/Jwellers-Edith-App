@@ -9,33 +9,28 @@ jobs:
   build-apk:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Setup Java JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install dependencies
+      - name: Install Dependencies & Initialize Android Platform
         run: |
           npm install @capacitor/core @capacitor/cli @capacitor/android
+          npx cap init "Jwellers Edith" "com.jwellersedith.app" --web-dir "public"
+          rm -rf android
+          npx cap add android
 
-      - name: Initialize Android Platform
-        run: |
-          npx cap add android || true
-          npx cap sync android
-
-      - name: Build Android APK with Gradle
+      - name: Build Android APK
         run: |
           cd android
           chmod +x gradlew
