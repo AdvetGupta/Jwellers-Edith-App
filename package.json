@@ -5,7 +5,15 @@
   "main": "App.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node ../tests/mobile_sync.test.js"
+    "test": "node ../tests/mobile_sync.test.js",
+    "cap:sync": "npx @capacitor/cli sync android",
+    "cap:build": "npx @capacitor/cli build android",
+    "cap:open": "npx @capacitor/cli open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/core": "^6.0.0"
   },
   "keywords": [
     "jewellery",
@@ -13,7 +21,9 @@
     "companion",
     "khata",
     "girvi",
-    "sync"
+    "sync",
+    "android",
+    "apk"
   ],
   "author": "Jwellers Edith",
   "license": "ISC"
