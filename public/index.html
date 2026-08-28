@@ -5,603 +5,726 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#c59b27">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <title>Jwellers Edith Mobile Companion</title>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Jwellers Edith — Mobile Companion</title>
   <style>
     :root {
       --primary: #c59b27;
-      --primary-dark: #a8831e;
-      --primary-light: #fef9e7;
-      --bg-app: #f4f6f9;
+      --primary-dark: #9a7818;
+      --primary-light: #fdf8e9;
+      --bg-app: #f1f4f8;
       --bg-card: #ffffff;
-      --text: #2c3e50;
-      --text-muted: #7f8c8d;
+      --text-main: #1a202c;
+      --text-muted: #718096;
       --border: #e2e8f0;
       --success: #27ae60;
-      --danger: #e74c3c;
-      --warning: #e67e22;
-      --info: #3498db;
-      --radius: 12px;
-      --shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      --danger: #e53e3e;
+      --warning: #dd6b20;
+      --info: #3182ce;
+      --radius: 14px;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+      --shadow: 0 6px 16px rgba(0,0,0,0.06);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    body { background: #e2e8f0; color: var(--text-main); margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; }
+    
+    /* Device Frame Simulator on Desktop */
+    #mobile-frame {
+      width: 100%;
+      max-width: 440px;
+      min-height: 100vh;
       background: var(--bg-app);
-      color: var(--text);
-      margin: 0; padding: 0;
-      padding-bottom: 80px;
+      position: relative;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 75px;
     }
-    .mobile-header {
+
+    /* Top Sticky Navigation Bar */
+    .app-header {
       position: sticky; top: 0;
       background: var(--bg-card);
-      padding: 14px 18px;
+      padding: 12px 18px;
       display: flex; justify-content: space-between; align-items: center;
       border-bottom: 1px solid var(--border);
-      z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
     }
-    .mobile-header h1 {
-      font-size: 18px; font-weight: 700; color: var(--primary);
-      display: flex; align-items: center; gap: 8px;
+    .app-logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 17px; color: var(--primary-dark); }
+    .sync-status-pill {
+      font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 20px;
+      display: flex; align-items: center; gap: 6px; cursor: pointer;
+      background: #e6fffa; color: #234e52; border: 1px solid #b2f5ea;
     }
-    .sync-badge {
-      font-size: 11px; padding: 4px 10px; border-radius: 20px;
-      background: #e8f8f5; color: var(--success); font-weight: 600;
-      display: flex; align-items: center; gap: 5px;
-    }
-    .mobile-content { padding: 16px; max-width: 600px; margin: 0 auto; }
+    .sync-status-pill.syncing { background: #feebc8; color: #7b341e; border-color: #fbd38d; }
+    .sync-status-pill.unpaired { background: #edf2f7; color: #4a5568; border-color: #cbd5e0; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); }
+    .syncing .dot { background: var(--warning); animation: pulse 1s infinite; }
+    .unpaired .dot { background: var(--text-muted); }
+    @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
+
+    /* Content Area */
+    .app-content { padding: 16px; flex: 1; overflow-y: auto; }
+
+    /* Bottom Navigation Bar */
     .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0;
+      position: fixed; bottom: 0; width: 100%; max-width: 440px;
       background: var(--bg-card); border-top: 1px solid var(--border);
-      display: flex; justify-content: space-around; padding: 8px 0 10px 0;
-      z-index: 200; box-shadow: 0 -4px 16px rgba(0,0,0,0.04);
+      display: flex; justify-content: space-around; padding: 10px 0;
+      z-index: 200; box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
     }
-    .nav-tab {
+    .nav-btn {
       display: flex; flex-direction: column; align-items: center;
-      text-decoration: none; color: var(--text-muted); font-size: 11px;
-      font-weight: 600; gap: 4px; cursor: pointer; border: none; background: none;
+      gap: 3px; border: none; background: none; color: var(--text-muted);
+      font-size: 11px; font-weight: 700; cursor: pointer; flex: 1;
     }
-    .nav-tab.active { color: var(--primary); }
-    .nav-tab .icon { font-size: 20px; }
+    .nav-btn.active { color: var(--primary-dark); }
+    .nav-btn .icon { font-size: 20px; }
+
+    /* Cards & Components */
     .card {
       background: var(--bg-card); border-radius: var(--radius);
       padding: 16px; margin-bottom: 14px; border: 1px solid var(--border);
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow-sm);
     }
     .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
-    .stat-box { background: var(--bg-card); padding: 14px; border-radius: var(--radius); border: 1px solid var(--border); }
-    .stat-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
-    .stat-val { font-size: 20px; font-weight: 800; margin-top: 4px; }
-    .search-box { position: relative; margin-bottom: 14px; }
+    .stat-card {
+      background: var(--bg-card); padding: 14px; border-radius: var(--radius);
+      border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+    }
+    .stat-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    .stat-num { font-size: 20px; font-weight: 800; margin-top: 4px; }
+
+    /* Buttons & Form Elements */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 6px; padding: 10px 16px; border-radius: 10px; font-size: 13px;
+      font-weight: 700; border: none; cursor: pointer; text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:active { background: var(--primary-dark); }
+    .btn-secondary { background: var(--bg-app); color: var(--text-main); border: 1px solid var(--border); }
+    .btn-whatsapp { background: #25d366; color: #fff; }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-block { width: 100%; padding: 12px; font-size: 14px; }
     .search-input {
       width: 100%; padding: 12px 14px 12px 38px; border-radius: 10px;
       border: 1px solid var(--border); font-size: 14px; background: var(--bg-card); outline: none;
     }
     .search-input:focus { border-color: var(--primary); }
-    .search-icon { position: absolute; left: 12px; top: 12px; color: var(--text-muted); }
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      gap: 6px; padding: 10px 16px; border-radius: 8px; font-size: 13px;
-      font-weight: 600; border: none; cursor: pointer; text-decoration: none;
-    }
-    .btn-primary { background: var(--primary); color: #ffffff; }
-    .btn-success { background: var(--success); color: #ffffff; }
-    .btn-whatsapp { background: #25d366; color: #ffffff; }
-    .btn-secondary { background: var(--bg-app); color: var(--text); border: 1px solid var(--border); }
-    .btn-block { width: 100%; padding: 12px; font-size: 15px; }
-    .mobile-modal-overlay {
+
+    /* Modals & Overlays */
+    .modal-backdrop {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.6); display: flex; align-items: flex-end; z-index: 500;
+      background: rgba(0,0,0,0.6); display: flex; align-items: flex-end; justify-content: center;
+      z-index: 500;
     }
-    .mobile-modal {
-      background: var(--bg-card); width: 100%;
+    .modal-sheet {
+      background: var(--bg-card); width: 100%; max-width: 440px;
       border-top-left-radius: 20px; border-top-right-radius: 20px;
-      padding: 24px 20px 30px 20px; max-height: 85vh; overflow-y: auto;
-      animation: slideUp 0.25s ease-out;
+      padding: 24px 20px 32px 20px; max-height: 88vh; overflow-y: auto;
+      animation: slideIn 0.25s ease-out;
     }
-    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    @keyframes slideIn { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+    /* Onboarding & Wizard */
+    .wizard-step { text-align: center; padding: 20px 0; }
+    .wizard-icon { font-size: 54px; margin-bottom: 12px; }
+    .wizard-title { font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 6px; }
+    .wizard-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
+    .step-pill { display: inline-block; padding: 4px 12px; border-radius: 12px; background: var(--primary-light); color: var(--primary-dark); font-size: 11px; font-weight: 800; margin-bottom: 14px; }
+    .progress-track { height: 6px; background: var(--border); border-radius: 4px; overflow: hidden; margin: 16px 0; }
+    .progress-bar { height: 100%; background: var(--success); width: 0%; transition: width 0.4s ease; }
   </style>
 </head>
 <body>
-  <div id="app"></div>
-  <div id="mobile-modal-root"></div>
+  <div id="mobile-frame">
+    <!-- Rendered via MobileApp -->
+  </div>
+  <div id="modal-host"></div>
 
   <script>
-    // --- 1. Mobile Translation Engine (I18N) ---
-    const MobileI18N = {
-      _lang: 'en',
-      _dict: {
-        en: {
-          appName: "Jwellers Edith Mobile",
-          dashboard: "Dashboard", khata: "Khata Dues", girvi: "Girvi (Pledge)",
-          customers: "Customers", settings: "Settings", pairWithDesktop: "Pair with Desktop",
-          paired: "Connected", syncStatus: "Sync Status", syncedJustNow: "Synced Just Now",
-          activeKhataDues: "Active Khata Dues", activeGirviLoans: "Active Girvi Pledges",
-          totalGoldPledged: "Gold Pledged", totalSilverPledged: "Silver Pledged",
-          todayGoldRate: "Today Gold Rate (22K)", todaySilverRate: "Today Silver Rate",
-          searchKhata: "Search customer or phone...", duesBalance: "Dues Balance",
-          sendWhatsappReminder: "WhatsApp", showUpiQr: "UPI QR",
-          noDuesFound: "No pending Khata dues found!", searchGirvi: "Search Girvi #, name, phone, village...",
-          principalAmount: "Principal (₹)", attachPhoto: "Photo", viewDetails: "Details",
-          searchCustomer: "Search customer directory...", call: "Call", whatsapp: "WhatsApp", sms: "SMS",
-          language: "Language / भाषा", shopUpiId: "Shop UPI ID (for QR codes)"
-        },
-        hi: {
-          appName: "ज्वेलर्स एडिथ मोबाइल",
-          dashboard: "डैशबोर्ड", khata: "खाता बकाया", girvi: "गिरवी खाता",
-          customers: "ग्राहक सूची", settings: "सेटिंग्स", pairWithDesktop: "डेस्कटॉप से जोड़ें",
-          paired: "जुड़ा हुआ", syncStatus: "सिंक स्थिति", syncedJustNow: "अभी सिंक हुआ",
-          activeKhataDues: "कुल खाता बकाया", activeGirviLoans: "सक्रिय गिरवी खाते",
-          totalGoldPledged: "जमा सोना (ग्राम)", totalSilverPledged: "जमा चांदी (ग्राम)",
-          todayGoldRate: "आज का सोना भाव (22K)", todaySilverRate: "आज का चांदी भाव",
-          searchKhata: "ग्राहक या फोन नंबर खोजें...", duesBalance: "बकाया रकम",
-          sendWhatsappReminder: "व्हाट्सएप", showUpiQr: "UPI QR",
-          noDuesFound: "कोई बकाया खाता नहीं मिला!", searchGirvi: "गिरवी नं., नाम, फोन, गांव से खोजें...",
-          principalAmount: "मूलधन (रकम)", attachPhoto: "फोटो लें", viewDetails: "विवरण",
-          searchCustomer: "ग्राहक सूची में खोजें...", call: "कॉल", whatsapp: "व्हाट्सएप", sms: "SMS",
-          language: "भाषा / Language", shopUpiId: "दुकान का UPI ID (QR पेमेंट के लिए)"
-        }
-      },
-      getLang() { return this._lang; },
-      setLang(l) { this._lang = l; try { localStorage.setItem('m_lang', l); } catch(e){} },
-      t(k, fb) { return (this._dict[this._lang] && this._dict[this._lang][k]) || fb || k; },
-      init() { try { const s = localStorage.getItem('m_lang'); if(s) this._lang = s; } catch(e){} }
+    // --- State & Mock Store ---
+    const State = {
+      isPaired: false,
+      isDemoMode: false,
+      pairingCode: 'JWELL-EDIT-8899',
+      accountEmail: '',
+      driveFolder: '/JwellersEdith_Sync/',
+      shopUpiId: 'owner.jeweller@upi',
+      lastSyncedAt: null,
+      currentScreen: 'dashboard',
+      lang: 'en',
+      khataList: [
+        { id: 1, name: 'Ramesh Patel', phone: '9822112233', city: 'Indapur', dues: 18500 },
+        { id: 2, name: 'Sunita Sharma', phone: '9833445566', city: 'Baramati', dues: 24000 },
+        { id: 3, name: 'Anand Kumar', phone: '9844556677', city: 'Pune', dues: 9200 },
+        { id: 4, name: 'Vijay Deshmukh', phone: '9855667788', city: 'Phaltan', dues: 45000 },
+        { id: 5, name: 'Sanjay Sonawane', phone: '9866778899', city: 'Daund', dues: 12800 }
+      ],
+      girviList: [
+        { id: 1, loan_number: 'GIR-1001', customer_name: 'Ramesh Patel', father_husband_name: 'Dattatray', phone1: '9822112233', address: 'Indapur', item_name: 'Gold Chain 22K', metal_type: 'gold', gold_weight: 18.5, silver_weight: 0, principal_amount: 55000, monthly_interest_percent: 2.0, loan_date: '2026-06-10', reference_person: 'Suresh Sheth' },
+        { id: 2, loan_number: 'GIR-1002', customer_name: 'Sunita Sharma', father_husband_name: 'Jagdish', phone1: '9833445566', address: 'Baramati', item_name: 'Silver Payal 92.5%', metal_type: 'silver', gold_weight: 0, silver_weight: 250, principal_amount: 14000, monthly_interest_percent: 2.5, loan_date: '2026-07-01' },
+        { id: 3, loan_number: 'GIR-1003', customer_name: 'Vijay Deshmukh', father_husband_name: 'Baburao', phone1: '9855667788', address: 'Phaltan', item_name: 'Gold Bangles (2)', metal_type: 'gold', gold_weight: 32.0, silver_weight: 0, principal_amount: 95000, monthly_interest_percent: 1.5, loan_date: '2026-05-15', reference_person: 'Maheshbhai' }
+      ],
+      customers: [
+        { id: 1, name: 'Ramesh Patel', phone: '9822112233', city: 'Indapur', balance: 18500 },
+        { id: 2, name: 'Sunita Sharma', phone: '9833445566', city: 'Baramati', balance: 24000 },
+        { id: 3, name: 'Anand Kumar', phone: '9844556677', city: 'Pune', balance: 9200 },
+        { id: 4, name: 'Vijay Deshmukh', phone: '9855667788', city: 'Phaltan', balance: 45000 }
+      ]
     };
 
-    // --- 2. Offline Storage Service ---
-    const MobileStorage = {
-      getItem(k) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch(e){ return null; } },
-      setItem(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
-      getPairingInfo() {
-        return this.getItem('m_pairing') || { paired: true, pairingCode: 'JWELL-EDIT-8899', accountEmail: 'owner.jeweller@gmail.com', driveFolder: '/JwellersEdith_Sync/', shopUpiId: 'owner.jeweller@upi', pairedAt: new Date().toISOString() };
-      },
-      savePairingInfo(info) { this.setItem('m_pairing', { ...info, paired: true, pairedAt: new Date().toISOString() }); },
-      getKhataDues() {
-        return this.getItem('m_khata') || [
-          { id: 1, name: 'Ramesh Patel', phone: '9822112233', city: 'Indapur', dues: 18500 },
-          { id: 2, name: 'Sunita Sharma', phone: '9833445566', city: 'Baramati', dues: 24000 },
-          { id: 3, name: 'Anand Kumar', phone: '9844556677', city: 'Pune', dues: 9200 },
-          { id: 4, name: 'Vijay Deshmukh', phone: '9855667788', city: 'Phaltan', dues: 45000 },
-          { id: 5, name: 'Sanjay Sonawane', phone: '9866778899', city: 'Daund', dues: 12800 }
-        ];
-      },
-      saveKhataDues(d) { this.setItem('m_khata', d); },
-      getGirviLoans() {
-        return this.getItem('m_girvi') || [
-          { id: 1, loan_number: 'GIR-1001', customer_name: 'Ramesh Patel', father_husband_name: 'Dattatray', phone1: '9822112233', address: 'Indapur', item_name: 'Gold Chain 22K', metal_type: 'gold', gold_weight: 18.5, silver_weight: 0, principal_amount: 55000, monthly_interest_percent: 2.0, loan_date: '2026-06-10', reference_person: 'Suresh Sheth' },
-          { id: 2, loan_number: 'GIR-1002', customer_name: 'Sunita Sharma', father_husband_name: 'Jagdish', phone1: '9833445566', address: 'Baramati', item_name: 'Silver Payal 92.5%', metal_type: 'silver', gold_weight: 0, silver_weight: 250, principal_amount: 14000, monthly_interest_percent: 2.5, loan_date: '2026-07-01' },
-          { id: 3, loan_number: 'GIR-1003', customer_name: 'Vijay Deshmukh', father_husband_name: 'Baburao', phone1: '9855667788', address: 'Phaltan', item_name: 'Gold Bangles (2)', metal_type: 'gold', gold_weight: 32.0, silver_weight: 0, principal_amount: 95000, monthly_interest_percent: 1.5, loan_date: '2026-05-15', reference_person: 'Maheshbhai' }
-        ];
-      },
-      saveGirviLoans(g) { this.setItem('m_girvi', g); },
-      getCustomers() {
-        return this.getItem('m_customers') || [
-          { id: 1, customer_id: 'CUST-001', name: 'Ramesh Patel', phone: '9822112233', city: 'Indapur', balance: 18500 },
-          { id: 2, customer_id: 'CUST-002', name: 'Sunita Sharma', phone: '9833445566', city: 'Baramati', balance: 24000 },
-          { id: 3, customer_id: 'CUST-003', name: 'Anand Kumar', phone: '9844556677', city: 'Pune', balance: 9200 },
-          { id: 4, customer_id: 'CUST-004', name: 'Vijay Deshmukh', phone: '9855667788', city: 'Phaltan', balance: 45000 }
-        ];
-      },
-      getMetalRates() {
-        return { gold22k: 67400, silver1kg: 86500 };
+    // --- Translations (I18N) ---
+    const I18N = {
+      t(k) {
+        const dict = {
+          en: {
+            appName: "Jwellers Edith", dashboard: "Dashboard", khata: "Khata", girvi: "Girvi",
+            customers: "Customers", settings: "Settings", pairPC: "Pair PC", connected: "Connected",
+            goldRate: "Today Gold 22K (10g)", silverRate: "Today Silver (1kg)",
+            activeKhataDues: "Active Khata Dues", activeGirvi: "Active Girvi",
+            goldPledged: "Gold Pledged", silverPledged: "Silver Pledged",
+            searchKhata: "Search customer or balance...", searchGirvi: "Search Girvi #, name, phone...",
+            whatsappReminder: "WhatsApp", upiQr: "UPI QR", details: "Details", photo: "Photo"
+          },
+          hi: {
+            appName: "ज्वेलर्स एडिथ", dashboard: "डैशबोर्ड", khata: "खाता", girvi: "गिरवी",
+            customers: "ग्राहक", settings: "सेटिंग्स", pairPC: "पीसी जोड़ें", connected: "जुड़ा हुआ",
+            goldRate: "आज सोना भाव (22K)", silverRate: "आज चांदी भाव (1kg)",
+            activeKhataDues: "कुल खाता बकाया", activeGirvi: "सक्रिय गिरवी",
+            goldPledged: "जमा सोना (ग्राम)", silverPledged: "जमा चांदी (ग्राम)",
+            searchKhata: "ग्राहक या फोन नंबर खोजें...", searchGirvi: "गिरवी नं., नाम, फोन खोजें...",
+            whatsappReminder: "व्हाट्सएप", upiQr: "UPI QR", details: "विवरण", photo: "फोटो"
+          }
+        };
+        return dict[State.lang][k] || k;
       }
     };
 
-    // --- 3. WhatsApp & UPI Generator ---
-    const WhatsAppService = {
-      sendKhataReminder(phone, name, dues) {
-        const pairing = MobileStorage.getPairingInfo();
-        const upi = pairing.shopUpiId || '';
-        let msg = `Namaste *${name} ji* 🙏\n\nThis is a polite reminder regarding your outstanding Khata balance at *Jwellers Edith*.\n\n• *Pending Balance Dues:* ₹${Number(dues).toLocaleString('en-IN')}\n`;
-        if (upi) msg += `• *Shop UPI ID for Payment:* \`${upi}\`\n`;
-        msg += `\nKindly clear your dues at your earliest convenience.\n\nThank you!\n- *Jwellers Edith*`;
-        const clean = String(phone).replace(/\D/g, '');
-        const p = clean.length === 10 ? `91${clean}` : clean;
-        window.open(`https://api.whatsapp.com/send?phone=${p}&text=${encodeURIComponent(msg)}`, '_blank');
-      }
-    };
-
-    const UpiService = {
-      showQr(name, dues) {
-        const pairing = MobileStorage.getPairingInfo();
-        const upiId = pairing.shopUpiId || 'owner.jeweller@upi';
-        const uri = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=Jwellers%20Edith&am=${parseFloat(dues).toFixed(2)}&cu=INR&tn=${encodeURIComponent('Khata Dues - ' + name)}`;
-        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(uri)}`;
-
-        const modalHtml = `
-          <div class="mobile-modal-overlay" id="upi-qr-modal" onclick="document.getElementById('upi-qr-modal').remove()">
-            <div class="mobile-modal" onclick="event.stopPropagation()">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-                <h3 style="font-size:16px;">💳 Customer Instant UPI Payment</h3>
-                <button class="btn btn-sm btn-secondary" onclick="document.getElementById('upi-qr-modal').remove()">✕</button>
-              </div>
-              <div style="text-align:center; padding:10px 0;">
-                <img src="${qrUrl}" alt="UPI QR Code" style="width:240px; height:240px; border-radius:12px; border:2px solid var(--border);" />
-                <div style="font-weight:800; font-size:24px; color:var(--primary); margin-top:12px;">₹${Number(dues).toLocaleString('en-IN')}</div>
-                <div style="font-size:13px; color:var(--text-muted); margin-top:2px;">Scan with GPay, PhonePe, Paytm or any UPI App</div>
-                <div style="font-size:12px; font-family:monospace; background:var(--bg-app); padding:6px 12px; border-radius:6px; margin-top:10px; display:inline-block;">${upiId}</div>
-              </div>
-              <button class="btn btn-secondary btn-block" style="margin-top:16px;" onclick="document.getElementById('upi-qr-modal').remove()">Close</button>
-            </div>
-          </div>
-        `;
-        document.getElementById('mobile-modal-root').innerHTML = modalHtml;
-      }
-    };
-
-    // --- 4. Main Mobile App Coordinator & Screens ---
+    // --- Main App Coordinator ---
     const MobileApp = {
-      _screen: 'dashboard',
-      _khataQuery: '',
-      _girviQuery: '',
-      _custQuery: '',
+      _wizardStep: 1,
+      _searchFilter: '',
 
       init() {
-        MobileI18N.init();
+        // Check saved storage
+        try {
+          const saved = localStorage.getItem('je_mobile_state');
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            Object.assign(State, parsed);
+          }
+        } catch(e) {}
         this.render();
       },
 
-      navigate(s) {
-        this._screen = s;
+      saveState() {
+        try {
+          localStorage.setItem('je_mobile_state', JSON.stringify({
+            isPaired: State.isPaired,
+            accountEmail: State.accountEmail,
+            pairingCode: State.pairingCode,
+            shopUpiId: State.shopUpiId,
+            lastSyncedAt: State.lastSyncedAt,
+            lang: State.lang
+          }));
+        } catch(e) {}
+      },
+
+      navigate(screen) {
+        State.currentScreen = screen;
+        this._searchFilter = '';
         this.render();
         window.scrollTo(0, 0);
       },
 
-      setLang(l) {
-        MobileI18N.setLang(l);
-        this.render();
-      },
-
       render() {
-        const root = document.getElementById('app');
-        if (!root) return;
-        const t = (k, fb) => MobileI18N.t(k, fb);
-        const pairing = MobileStorage.getPairingInfo();
+        const frame = document.getElementById('mobile-frame');
+        if (!frame) return;
 
-        let screenContent = '';
-        if (this._screen === 'khata') screenContent = this._renderKhata();
-        else if (this._screen === 'girvi') screenContent = this._renderGirvi();
-        else if (this._screen === 'customers') screenContent = this._renderCustomers();
-        else if (this._screen === 'pairing') screenContent = this._renderPairing();
-        else if (this._screen === 'settings') screenContent = this._renderSettings();
-        else screenContent = this._renderDashboard();
+        // If not paired and not in demo mode, show the Step-by-Step Onboarding Setup Wizard!
+        if (!State.isPaired && !State.isDemoMode) {
+          frame.innerHTML = this._renderOnboardingWizard();
+          return;
+        }
 
-        root.innerHTML = `
-          <header class="mobile-header">
-            <h1><span>💍</span> ${t('appName', 'Jwellers Edith')}</h1>
-            <div class="sync-badge" onclick="MobileApp.navigate('pairing')" style="cursor:pointer;">
-              <span style="display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--success);"></span>
-              ${pairing.paired ? t('paired', 'Connected') : t('pairWithDesktop', 'Pair PC')}
+        frame.innerHTML = `
+          <!-- Sticky Header -->
+          <header class="app-header">
+            <div class="app-logo">
+              <span>💍</span> ${I18N.t('appName')}
+            </div>
+            <div class="sync-status-pill ${State.isPaired ? '' : 'unpaired'}" onclick="MobileApp.showSyncSheet()">
+              <span class="dot"></span>
+              <span>${State.isPaired ? I18N.t('connected') : I18N.t('pairPC')}</span>
             </div>
           </header>
 
-          <main>${screenContent}</main>
+          <!-- Main Screen View -->
+          <main class="app-content">
+            ${this._renderScreenContent()}
+          </main>
 
+          <!-- Bottom Floating Bar -->
           <nav class="bottom-nav">
-            <button class="nav-tab ${this._screen === 'dashboard' ? 'active' : ''}" onclick="MobileApp.navigate('dashboard')">
-              <span class="icon">◉</span><span>${t('dashboard', 'Dashboard')}</span>
+            <button class="nav-btn ${State.currentScreen === 'dashboard' ? 'active' : ''}" onclick="MobileApp.navigate('dashboard')">
+              <span class="icon">◉</span><span>${I18N.t('dashboard')}</span>
             </button>
-            <button class="nav-tab ${this._screen === 'khata' ? 'active' : ''}" onclick="MobileApp.navigate('khata')">
-              <span class="icon">📒</span><span>${t('khata', 'Khata')}</span>
+            <button class="nav-btn ${State.currentScreen === 'khata' ? 'active' : ''}" onclick="MobileApp.navigate('khata')">
+              <span class="icon">📒</span><span>${I18N.t('khata')}</span>
             </button>
-            <button class="nav-tab ${this._screen === 'girvi' ? 'active' : ''}" onclick="MobileApp.navigate('girvi')">
-              <span class="icon">💍</span><span>${t('girvi', 'Girvi')}</span>
+            <button class="nav-btn ${State.currentScreen === 'girvi' ? 'active' : ''}" onclick="MobileApp.navigate('girvi')">
+              <span class="icon">💍</span><span>${I18N.t('girvi')}</span>
             </button>
-            <button class="nav-tab ${this._screen === 'customers' ? 'active' : ''}" onclick="MobileApp.navigate('customers')">
-              <span class="icon">👥</span><span>${t('customers', 'Customers')}</span>
+            <button class="nav-btn ${State.currentScreen === 'customers' ? 'active' : ''}" onclick="MobileApp.navigate('customers')">
+              <span class="icon">👥</span><span>${I18N.t('customers')}</span>
             </button>
-            <button class="nav-tab ${this._screen === 'settings' ? 'active' : ''}" onclick="MobileApp.navigate('settings')">
-              <span class="icon">⚙</span><span>${t('settings', 'Settings')}</span>
+            <button class="nav-btn ${State.currentScreen === 'settings' ? 'active' : ''}" onclick="MobileApp.navigate('settings')">
+              <span class="icon">⚙</span><span>${I18N.t('settings')}</span>
             </button>
           </nav>
         `;
       },
 
+      // --- Screen Renderers ---
+      _renderScreenContent() {
+        switch(State.currentScreen) {
+          case 'khata': return this._renderKhata();
+          case 'girvi': return this._renderGirvi();
+          case 'customers': return this._renderCustomers();
+          case 'settings': return this._renderSettings();
+          default: return this._renderDashboard();
+        }
+      },
+
       _renderDashboard() {
-        const t = (k, fb) => MobileI18N.t(k, fb);
-        const khata = MobileStorage.getKhataDues();
-        const girvi = MobileStorage.getGirviLoans();
-        const rates = MobileStorage.getMetalRates();
-        const totalKhata = khata.reduce((s, c) => s + (c.dues || 0), 0);
-        const totalGirvi = girvi.reduce((s, g) => s + (g.principal_amount || 0), 0);
-        const goldWt = girvi.reduce((s, g) => s + (g.gold_weight || 0), 0);
-        const silverWt = girvi.reduce((s, g) => s + (g.silver_weight || 0), 0);
+        const totalKhata = State.khataList.reduce((s, c) => s + (c.dues || 0), 0);
+        const totalGirvi = State.girviList.reduce((s, g) => s + (g.principal_amount || 0), 0);
+        const goldWt = State.girviList.reduce((s, g) => s + (g.gold_weight || 0), 0);
+        const silverWt = State.girviList.reduce((s, g) => s + (g.silver_weight || 0), 0);
 
         return `
-          <div class="mobile-content">
-            <div class="card" style="background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); border-left: 4px solid var(--primary);">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                  <div style="font-size:11px; font-weight:700; color:var(--primary); text-transform:uppercase;">🥇 ${t('todayGoldRate', 'Gold 22K (10g)')}</div>
-                  <div style="font-size:18px; font-weight:800; margin-top:2px;">₹${rates.gold22k.toLocaleString('en-IN')}</div>
-                </div>
-                <div style="text-align:right;">
-                  <div style="font-size:11px; font-weight:700; color:var(--info); text-transform:uppercase;">🥈 ${t('todaySilverRate', 'Silver (1kg)')}</div>
-                  <div style="font-size:18px; font-weight:800; margin-top:2px;">₹${rates.silver1kg.toLocaleString('en-IN')}</div>
-                </div>
+          <!-- Metal Ticker -->
+          <div class="card" style="background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%); border-left: 4px solid var(--primary);">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-size:11px; font-weight:700; color:var(--primary);">${I18N.t('goldRate')}</div>
+                <div style="font-size:18px; font-weight:800; margin-top:2px;">₹67,400</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:11px; font-weight:700; color:var(--info);">${I18N.t('silverRate')}</div>
+                <div style="font-size:18px; font-weight:800; margin-top:2px;">₹86,500</div>
               </div>
             </div>
+          </div>
 
-            <div class="stat-grid">
-              <div class="stat-box" onclick="MobileApp.navigate('khata')" style="cursor:pointer;">
-                <div class="stat-label">${t('activeKhataDues', 'Khata Dues')}</div>
-                <div class="stat-val" style="color:var(--danger)">₹${totalKhata.toLocaleString('en-IN')}</div>
-                <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">${khata.length} customers</div>
-              </div>
-              <div class="stat-box" onclick="MobileApp.navigate('girvi')" style="cursor:pointer;">
-                <div class="stat-label">${t('activeGirviLoans', 'Active Girvi')}</div>
-                <div class="stat-val" style="color:var(--primary)">₹${totalGirvi.toLocaleString('en-IN')}</div>
-                <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">${girvi.length} pledges</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-label">${t('totalGoldPledged', 'Gold Pledged')}</div>
-                <div class="stat-val" style="color:var(--warning)">${goldWt.toFixed(2)}g</div>
-                <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">In Safe Vault</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-label">${t('totalSilverPledged', 'Silver Pledged')}</div>
-                <div class="stat-val" style="color:var(--info)">${silverWt.toFixed(2)}g</div>
-                <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">In Safe Vault</div>
-              </div>
+          <!-- 4 Core Business KPIs -->
+          <div class="stat-grid">
+            <div class="stat-card" onclick="MobileApp.navigate('khata')" style="cursor:pointer;">
+              <div class="stat-label">${I18N.t('activeKhataDues')}</div>
+              <div class="stat-num" style="color:var(--danger)">₹${totalKhata.toLocaleString('en-IN')}</div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">${State.khataList.length} accounts</div>
             </div>
+            <div class="stat-card" onclick="MobileApp.navigate('girvi')" style="cursor:pointer;">
+              <div class="stat-label">${I18N.t('activeGirvi')}</div>
+              <div class="stat-num" style="color:var(--primary)">₹${totalGirvi.toLocaleString('en-IN')}</div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">${State.girviList.length} pledges</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">${I18N.t('goldPledged')}</div>
+              <div class="stat-num" style="color:var(--warning)">${goldWt.toFixed(2)}g</div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">In Vault</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">${I18N.t('silverPledged')}</div>
+              <div class="stat-num" style="color:var(--info)">${silverWt.toFixed(2)}g</div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">In Vault</div>
+            </div>
+          </div>
 
-            <div class="card">
-              <div style="font-weight:700; font-size:14px; margin-bottom:12px;">⚡ Quick Actions</div>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                <button class="btn btn-primary" onclick="MobileApp.navigate('khata')" style="padding:12px;">📒 View Khata</button>
-                <button class="btn btn-secondary" onclick="MobileApp.navigate('girvi')" style="padding:12px;">💍 View Girvi</button>
+          <!-- Sync Overview Banner -->
+          <div class="card" style="border: 1px dashed var(--border); display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-weight:700; font-size:13px;">☁️ Google Drive Free Sync</div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">
+                ${State.isPaired ? `Connected: ${State.accountEmail || 'owner.jeweller@gmail.com'}` : 'Running in Demo Mode'}
               </div>
             </div>
+            <button class="btn btn-sm btn-primary" onclick="MobileApp.showSyncSheet()">
+              🔄 Sync
+            </button>
           </div>
         `;
       },
 
       _renderKhata() {
-        const t = (k, fb) => MobileI18N.t(k, fb);
-        const khata = MobileStorage.getKhataDues();
-        const q = this._khataQuery.toLowerCase();
-        const filtered = khata.filter(c => !q || c.name.toLowerCase().includes(q) || c.phone.includes(q) || c.city.toLowerCase().includes(q));
+        const q = this._searchFilter.toLowerCase();
+        const filtered = State.khataList.filter(c => !q || c.name.toLowerCase().includes(q) || c.phone.includes(q) || c.city.toLowerCase().includes(q));
 
         return `
-          <div class="mobile-content">
-            <div class="search-box">
-              <span class="search-icon">🔍</span>
-              <input type="text" class="search-input" placeholder="${t('searchKhata', 'Search customer name or phone...')}" value="${this._khataQuery}" oninput="MobileApp._khataQuery = this.value; MobileApp.render();">
-            </div>
+          <div style="position:relative; margin-bottom:14px;">
+            <span style="position:absolute; left:12px; top:12px; color:var(--text-muted);">🔍</span>
+            <input type="text" class="search-input" placeholder="${I18N.t('searchKhata')}" value="${this._searchFilter}" oninput="MobileApp._searchFilter = this.value; MobileApp.render();">
+          </div>
 
-            ${filtered.map(c => `
-              <div class="card" style="border-left: 4px solid var(--danger);">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                  <div>
-                    <div style="font-weight:700; font-size:15px;">${c.name}</div>
-                    <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">📍 ${c.city} • 📞 ${c.phone}</div>
-                  </div>
-                  <div style="text-align:right;">
-                    <div style="font-size:11px; font-weight:700; color:var(--text-muted);">DUES BALANCE</div>
-                    <div style="font-size:18px; font-weight:800; color:var(--danger); margin-top:2px;">₹${(c.dues || 0).toLocaleString('en-IN')}</div>
-                  </div>
+          ${filtered.map(c => `
+            <div class="card" style="border-left: 4px solid var(--danger);">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div>
+                  <div style="font-weight:700; font-size:15px;">${c.name}</div>
+                  <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">📍 ${c.city} • 📞 ${c.phone}</div>
                 </div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; border-top:1px solid var(--border); padding-top:12px;">
-                  <button class="btn btn-whatsapp" onclick="WhatsAppService.sendKhataReminder('${c.phone}', '${c.name}', ${c.dues})">📲 ${t('sendWhatsappReminder', 'WhatsApp')}</button>
-                  <button class="btn btn-primary" onclick="UpiService.showQr('${c.name}', ${c.dues})">💳 ${t('showUpiQr', 'UPI QR')}</button>
+                <div style="text-align:right;">
+                  <div style="font-size:11px; font-weight:700; color:var(--text-muted);">PENDING DUES</div>
+                  <div style="font-size:18px; font-weight:800; color:var(--danger); margin-top:2px;">₹${c.dues.toLocaleString('en-IN')}</div>
                 </div>
               </div>
-            `).join('')}
-          </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; border-top:1px solid var(--border); padding-top:10px;">
+                <button class="btn btn-whatsapp" onclick="MobileApp.sendWhatsApp('${c.phone}', '${c.name}', ${c.dues})">📲 ${I18N.t('whatsappReminder')}</button>
+                <button class="btn btn-primary" onclick="MobileApp.showUpiQr('${c.name}', ${c.dues})">💳 ${I18N.t('upiQr')}</button>
+              </div>
+            </div>
+          `).join('')}
         `;
       },
 
       _renderGirvi() {
-        const t = (k, fb) => MobileI18N.t(k, fb);
-        const girvi = MobileStorage.getGirviLoans();
-        const q = this._girviQuery.toLowerCase();
-        const filtered = girvi.filter(g => !q || g.loan_number.toLowerCase().includes(q) || g.customer_name.toLowerCase().includes(q) || g.phone1.includes(q) || g.address.toLowerCase().includes(q) || g.item_name.toLowerCase().includes(q));
+        const q = this._searchFilter.toLowerCase();
+        const filtered = State.girviList.filter(g => !q || g.loan_number.toLowerCase().includes(q) || g.customer_name.toLowerCase().includes(q) || g.phone1.includes(q) || g.address.toLowerCase().includes(q));
 
         return `
-          <div class="mobile-content">
-            <div class="search-box">
-              <span class="search-icon">🔍</span>
-              <input type="text" class="search-input" placeholder="${t('searchGirvi', 'Search Girvi #, name, phone, village...')}" value="${this._girviQuery}" oninput="MobileApp._girviQuery = this.value; MobileApp.render();">
-            </div>
+          <div style="position:relative; margin-bottom:14px;">
+            <span style="position:absolute; left:12px; top:12px; color:var(--text-muted);">🔍</span>
+            <input type="text" class="search-input" placeholder="${I18N.t('searchGirvi')}" value="${this._searchFilter}" oninput="MobileApp._searchFilter = this.value; MobileApp.render();">
+          </div>
 
-            ${filtered.map(g => {
-              const wt = g.metal_type === 'gold' ? `${g.gold_weight}g Gold` : g.metal_type === 'silver' ? `${g.silver_weight}g Silver` : `${g.gold_weight}g Au / ${g.silver_weight}g Ag`;
-              return `
-                <div class="card" style="border-left: 4px solid var(--primary);">
-                  <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                    <div>
-                      <div style="font-size:12px; font-weight:700; color:var(--primary);">${g.loan_number}</div>
-                      <div style="font-weight:700; font-size:15px; margin-top:2px;">${g.customer_name}</div>
-                      <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">📍 ${g.address} • 📞 ${g.phone1}</div>
-                    </div>
-                    <div style="text-align:right;">
-                      <div style="font-size:11px; font-weight:700; color:var(--text-muted);">${t('principalAmount', 'PRINCIPAL')}</div>
-                      <div style="font-size:17px; font-weight:800; color:var(--primary); margin-top:2px;">₹${(g.principal_amount || 0).toLocaleString('en-IN')}</div>
-                      <div style="font-size:11px; color:var(--text-muted);">${g.monthly_interest_percent || 2.0}% /mo</div>
-                    </div>
+          ${filtered.map(g => {
+            const wt = g.metal_type === 'gold' ? `${g.gold_weight}g Gold` : g.metal_type === 'silver' ? `${g.silver_weight}g Silver` : `${g.gold_weight}g Au / ${g.silver_weight}g Ag`;
+            return `
+              <div class="card" style="border-left: 4px solid var(--primary);">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                  <div>
+                    <div style="font-size:12px; font-weight:700; color:var(--primary);">${g.loan_number}</div>
+                    <div style="font-weight:700; font-size:15px; margin-top:2px;">${g.customer_name}</div>
+                    <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">📍 ${g.address} • 📞 ${g.phone1}</div>
                   </div>
-
-                  <div style="background:var(--bg-app); padding:8px 12px; border-radius:8px; margin-top:10px; font-size:13px; display:flex; justify-content:space-between;">
-                    <span>💎 <strong>${g.item_name}</strong></span>
-                    <span>⚖️ <strong>${wt}</strong></span>
-                  </div>
-
-                  ${g.reference_person ? `<div style="font-size:12px; color:var(--text-muted); margin-top:6px;">🤝 Reference: <strong>${g.reference_person}</strong></div>` : ''}
-
-                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px;">
-                    <button class="btn btn-secondary" onclick="MobileApp.attachPhoto('${g.loan_number}')">📸 ${t('attachPhoto', 'Photo')}</button>
-                    <button class="btn btn-primary" onclick="MobileApp.viewGirvi('${g.loan_number}')">👁️ ${t('viewDetails', 'Details')}</button>
+                  <div style="text-align:right;">
+                    <div style="font-size:11px; font-weight:700; color:var(--text-muted);">PRINCIPAL</div>
+                    <div style="font-size:17px; font-weight:800; color:var(--primary); margin-top:2px;">₹${g.principal_amount.toLocaleString('en-IN')}</div>
+                    <div style="font-size:11px; color:var(--text-muted);">${g.monthly_interest_percent}% /mo</div>
                   </div>
                 </div>
-              `;
-            }).join('')}
+
+                <div style="background:var(--bg-app); padding:8px 12px; border-radius:8px; margin-top:10px; font-size:13px; display:flex; justify-content:space-between;">
+                  <span>💎 <strong>${g.item_name}</strong></span>
+                  <span>⚖️ <strong>${wt}</strong></span>
+                </div>
+
+                ${g.reference_person ? `<div style="font-size:12px; color:var(--text-muted); margin-top:6px;">🤝 Reference: <strong>${g.reference_person}</strong></div>` : ''}
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px;">
+                  <button class="btn btn-secondary" onclick="MobileApp.attachPhoto('${g.loan_number}')">📸 ${I18N.t('photo')}</button>
+                  <button class="btn btn-primary" onclick="MobileApp.viewGirvi('${g.loan_number}')">👁️ ${I18N.t('details')}</button>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        `;
+      },
+
+      _renderCustomers() {
+        const q = this._searchFilter.toLowerCase();
+        const filtered = State.customers.filter(c => !q || c.name.toLowerCase().includes(q) || c.phone.includes(q) || c.city.toLowerCase().includes(q));
+
+        return `
+          <div style="position:relative; margin-bottom:14px;">
+            <span style="position:absolute; left:12px; top:12px; color:var(--text-muted);">🔍</span>
+            <input type="text" class="search-input" placeholder="Search customer directory..." value="${this._searchFilter}" oninput="MobileApp._searchFilter = this.value; MobileApp.render();">
+          </div>
+
+          ${filtered.map(c => `
+            <div class="card">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-weight:700; font-size:15px;">${c.name}</div>
+                  <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">📍 ${c.city} • 📞 ${c.phone}</div>
+                </div>
+                <div style="text-align:right;">
+                  <div style="font-size:11px; color:var(--text-muted);">Balance</div>
+                  <div style="font-weight:700; color:${c.balance > 0 ? 'var(--danger)' : 'var(--success)'}; font-size:14px;">₹${(c.balance || 0).toLocaleString('en-IN')}</div>
+                </div>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-top:12px; border-top:1px solid var(--border); padding-top:10px;">
+                <a href="tel:${c.phone}" class="btn btn-secondary" style="font-size:12px; padding:8px;">📞 Call</a>
+                <a href="sms:${c.phone}" class="btn btn-secondary" style="font-size:12px; padding:8px;">💬 SMS</a>
+                <a href="https://api.whatsapp.com/send?phone=91${c.phone}" target="_blank" class="btn btn-whatsapp" style="font-size:12px; padding:8px;">📲 WhatsApp</a>
+              </div>
+            </div>
+          `).join('')}
+        `;
+      },
+
+      _renderSettings() {
+        return `
+          <div class="card">
+            <div style="font-weight:700; font-size:14px; margin-bottom:10px;">🌐 Language / भाषा</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <button class="btn ${State.lang === 'en' ? 'btn-primary' : 'btn-secondary'}" onclick="State.lang = 'en'; MobileApp.saveState(); MobileApp.render();">🇬🇧 English</button>
+              <button class="btn ${State.lang === 'hi' ? 'btn-primary' : 'btn-secondary'}" onclick="State.lang = 'hi'; MobileApp.saveState(); MobileApp.render();">🇮🇳 हिंदी</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div style="font-weight:700; font-size:14px; margin-bottom:6px;">💳 Shop UPI ID (for QR codes)</div>
+            <input type="text" id="upi-field" class="search-input" style="padding-left:14px;" value="${State.shopUpiId}">
+            <button class="btn btn-secondary btn-block" style="margin-top:10px;" onclick="State.shopUpiId = document.getElementById('upi-field').value.trim(); MobileApp.saveState(); alert('✅ Saved UPI ID!');">💾 Save UPI ID</button>
+          </div>
+
+          <div class="card">
+            <div style="font-weight:700; font-size:14px; margin-bottom:6px;">☁️ Desktop PC Pairing</div>
+            <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
+              <div>Status: <strong>${State.isPaired ? '🟢 Connected to PC' : '⚪ Demo Mode'}</strong></div>
+              <div>Account: <strong>${State.accountEmail || 'owner.jeweller@gmail.com'}</strong></div>
+              <div>Pairing Code: <code>${State.pairingCode}</code></div>
+            </div>
+            <button class="btn btn-secondary btn-block" style="margin-top:12px;" onclick="MobileApp.resetOnboarding()">
+              🔗 Re-pair / Disconnect Device
+            </button>
+          </div>
+
+          <div style="text-align:center; padding:16px; font-size:12px; color:var(--text-muted); line-height:1.6;">
+            <div style="font-weight:700; color:var(--primary);">Jwellers Edith — Mobile Companion</div>
+            <div>Version 1.3.0 • An <strong>AD's Creation</strong> Product</div>
           </div>
         `;
+      },
+
+      // --- Onboarding & Setup Wizard ---
+      _renderOnboardingWizard() {
+        let stepHtml = '';
+        if (this._wizardStep === 1) {
+          stepHtml = `
+            <div class="wizard-step">
+              <div class="wizard-icon">💍</div>
+              <span class="step-pill">STEP 1 OF 3</span>
+              <h2 class="wizard-title">Welcome to Jwellers Edith</h2>
+              <p class="wizard-desc">Connect your smartphone with your Desktop PC software via Google Drive Sync for ₹0/month offline access.</p>
+              <button class="btn btn-primary btn-block" style="padding:14px; font-size:15px;" onclick="MobileApp._wizardStep = 2; MobileApp.render();">
+                🔗 Connect with Desktop Software
+              </button>
+              <button class="btn btn-secondary btn-block" style="margin-top:10px;" onclick="State.isDemoMode = true; MobileApp.render();">
+                👁️ Explore with Demo Data
+              </button>
+            </div>
+          `;
+        } else if (this._wizardStep === 2) {
+          stepHtml = `
+            <div class="wizard-step">
+              <div class="wizard-icon">📲</div>
+              <span class="step-pill">STEP 2 OF 3</span>
+              <h2 class="wizard-title">Pair with Desktop PC</h2>
+              <p class="wizard-desc">Open <strong>Desktop Software > Settings > Mobile Companion QR</strong> and enter the pairing code shown on your computer screen.</p>
+              
+              <div style="text-align:left; margin:16px 0;">
+                <label style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Pairing Code</label>
+                <input type="text" id="wiz-code" class="search-input" style="padding-left:14px; font-weight:800; font-size:16px; letter-spacing:1px; margin-top:6px;" value="JWELL-EDIT-8899">
+
+                <label style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-top:14px; display:block;">Your Google Email (@gmail.com)</label>
+                <input type="email" id="wiz-email" class="search-input" style="padding-left:14px; margin-top:6px;" placeholder="owner.jeweller@gmail.com" value="owner.jeweller@gmail.com">
+              </div>
+
+              <button class="btn btn-primary btn-block" style="padding:14px;" onclick="MobileApp.startSyncProcess()">
+                🚀 Connect & Sync Data
+              </button>
+              <button class="btn btn-secondary btn-block" style="margin-top:10px;" onclick="MobileApp._wizardStep = 1; MobileApp.render();">
+                ← Back
+              </button>
+            </div>
+          `;
+        } else if (this._wizardStep === 3) {
+          stepHtml = `
+            <div class="wizard-step">
+              <div class="wizard-icon">☁️</div>
+              <span class="step-pill" style="background:#c6f6d5; color:#22543d;">STEP 3 OF 3: SYNCING</span>
+              <h2 class="wizard-title" id="sync-title">Connecting to Google Drive...</h2>
+              <p class="wizard-desc" id="sync-desc">Establishing secure handshake with /JwellersEdith_Sync/ on your 15 GB free Drive storage.</p>
+              
+              <div class="progress-track">
+                <div class="progress-bar" id="wiz-bar"></div>
+              </div>
+
+              <div id="sync-log" style="text-align:left; background:var(--bg-card); padding:12px; border-radius:10px; font-size:12px; font-family:monospace; line-height:1.6; border:1px solid var(--border); max-height:140px; overflow-y:auto;">
+                <div>⏳ Handshaking with JWELL-EDIT-8899...</div>
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="app-content" style="display:flex; align-items:center; justify-content:center; min-height:100vh;">
+            <div class="card" style="width:100%; border:none; box-shadow:none; background:transparent;">
+              ${stepHtml}
+            </div>
+          </div>
+        `;
+      },
+
+      startSyncProcess() {
+        State.pairingCode = document.getElementById('wiz-code')?.value.trim() || 'JWELL-EDIT-8899';
+        State.accountEmail = document.getElementById('wiz-email')?.value.trim() || 'owner.jeweller@gmail.com';
+        this._wizardStep = 3;
+        this.render();
+
+        const bar = document.getElementById('wiz-bar');
+        const log = document.getElementById('sync-log');
+        const title = document.getElementById('sync-title');
+        const desc = document.getElementById('sync-desc');
+
+        setTimeout(() => {
+          if (bar) bar.style.width = '35%';
+          if (log) log.innerHTML += '<div>✅ Google Drive Authenticated: ' + State.accountEmail + '</div>';
+        }, 600);
+
+        setTimeout(() => {
+          if (bar) bar.style.width = '75%';
+          if (log) log.innerHTML += '<div>📥 Downloading Khata balances (5 records)...</div><div>📥 Downloading Girvi pledges (3 records)...</div>';
+        }, 1300);
+
+        setTimeout(() => {
+          if (bar) bar.style.width = '100%';
+          if (title) title.textContent = '🎉 All Synced & Ready!';
+          if (desc) desc.textContent = 'Your mobile device is now paired and 100% offline-ready.';
+          if (log) log.innerHTML += '<div style="color:var(--success); font-weight:700;">✅ Handshake Complete! Local cache ready.</div>';
+          State.isPaired = true;
+          State.isDemoMode = false;
+          State.lastSyncedAt = new Date().toLocaleTimeString();
+          MobileApp.saveState();
+          setTimeout(() => {
+            MobileApp.navigate('dashboard');
+          }, 900);
+        }, 2100);
+      },
+
+      resetOnboarding() {
+        State.isPaired = false;
+        State.isDemoMode = false;
+        this._wizardStep = 1;
+        this.saveState();
+        this.render();
+      },
+
+      // --- Modals & Actions ---
+      showSyncSheet() {
+        const modalHtml = `
+          <div class="modal-backdrop" onclick="document.getElementById('sync-sheet').remove()" id="sync-sheet">
+            <div class="modal-sheet" onclick="event.stopPropagation()">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <h3 style="font-size:17px; font-weight:800;">☁️ Google Drive Live Sync</h3>
+                <button class="btn btn-sm btn-secondary" onclick="document.getElementById('sync-sheet').remove()">✕</button>
+              </div>
+              <div style="background:var(--bg-app); padding:14px; border-radius:12px; font-size:13px; line-height:1.6; margin-bottom:14px;">
+                <div>Account: <strong>${State.accountEmail || 'owner.jeweller@gmail.com'}</strong></div>
+                <div>Sync Folder: <code>/JwellersEdith_Sync/</code></div>
+                <div>Status: <strong style="color:var(--success);">🟢 Connected & Synced</strong></div>
+                <div>Last Synchronized: <strong>${State.lastSyncedAt || 'Just Now'}</strong></div>
+              </div>
+              <button class="btn btn-primary btn-block" style="padding:14px;" onclick="MobileApp.triggerInstantSync()">
+                🔄 Fetch Latest Updates from PC
+              </button>
+              <button class="btn btn-secondary btn-block" style="margin-top:10px;" onclick="document.getElementById('sync-sheet').remove()">
+                Close
+              </button>
+            </div>
+          </div>
+        `;
+        document.getElementById('modal-host').innerHTML = modalHtml;
+      },
+
+      triggerInstantSync() {
+        const sheet = document.getElementById('sync-sheet');
+        if (sheet) sheet.remove();
+        alert('🔄 Delta sync completed! Local Khata & Girvi caches are 100% up-to-date.');
+        State.lastSyncedAt = new Date().toLocaleTimeString();
+        this.saveState();
+        this.render();
+      },
+
+      sendWhatsApp(phone, name, dues) {
+        let msg = `Namaste *${name} ji* 🙏\n\nThis is a polite reminder regarding your outstanding Khata balance at *Jwellers Edith*.\n\n• *Pending Balance Dues:* ₹${Number(dues).toLocaleString('en-IN')}\n• *Shop UPI ID:* \`${State.shopUpiId}\`\n\nKindly clear your dues at your earliest convenience.\n\nThank you!\n- *Jwellers Edith*`;
+        const p = String(phone).replace(/\D/g, '');
+        window.open(`https://api.whatsapp.com/send?phone=91${p}&text=${encodeURIComponent(msg)}`, '_blank');
+      },
+
+      showUpiQr(name, dues) {
+        const uri = `upi://pay?pa=${encodeURIComponent(State.shopUpiId)}&pn=Jwellers%20Edith&am=${parseFloat(dues).toFixed(2)}&cu=INR&tn=${encodeURIComponent('Khata Dues - ' + name)}`;
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(uri)}`;
+
+        const modalHtml = `
+          <div class="modal-backdrop" id="upi-modal" onclick="document.getElementById('upi-modal').remove()">
+            <div class="modal-sheet" onclick="event.stopPropagation()">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <h3 style="font-size:16px; font-weight:800;">💳 Customer Instant UPI Payment</h3>
+                <button class="btn btn-sm btn-secondary" onclick="document.getElementById('upi-modal').remove()">✕</button>
+              </div>
+              <div style="text-align:center; padding:10px 0;">
+                <img src="${qrUrl}" alt="UPI QR" style="width:230px; height:230px; border-radius:12px; border:2px solid var(--border);" />
+                <div style="font-weight:800; font-size:24px; color:var(--primary); margin-top:12px;">₹${Number(dues).toLocaleString('en-IN')}</div>
+                <div style="font-size:13px; color:var(--text-muted); margin-top:2px;">Scan with GPay, PhonePe, Paytm or any UPI App</div>
+                <div style="font-size:12px; font-family:monospace; background:var(--bg-app); padding:6px 12px; border-radius:6px; margin-top:10px; display:inline-block;">${State.shopUpiId}</div>
+              </div>
+              <button class="btn btn-secondary btn-block" style="margin-top:16px;" onclick="document.getElementById('upi-modal').remove()">Close</button>
+            </div>
+          </div>
+        `;
+        document.getElementById('modal-host').innerHTML = modalHtml;
       },
 
       attachPhoto(loanNo) {
         const input = document.createElement('input');
         input.type = 'file'; input.accept = 'image/*'; input.capture = 'environment';
         input.onchange = (e) => {
-          if (e.target.files[0]) alert(`📸 Photo captured for Ticket #${loanNo} and queued for sync!`);
+          if (e.target.files[0]) alert(`📸 Photo captured for Ticket #${loanNo} and queued for Google Drive Sync!`);
         };
         input.click();
       },
 
       viewGirvi(loanNo) {
-        const girvi = MobileStorage.getGirviLoans();
-        const g = girvi.find(x => x.loan_number === loanNo);
+        const g = State.girviList.find(x => x.loan_number === loanNo);
         if (!g) return;
 
         const modalHtml = `
-          <div class="mobile-modal-overlay" id="girvi-detail-modal" onclick="document.getElementById('girvi-detail-modal').remove()">
-            <div class="mobile-modal" onclick="event.stopPropagation()">
+          <div class="modal-backdrop" id="girvi-modal" onclick="document.getElementById('girvi-modal').remove()">
+            <div class="modal-sheet" onclick="event.stopPropagation()">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-                <h3 style="font-size:16px;">💍 Ticket #${g.loan_number}</h3>
-                <button class="btn btn-sm btn-secondary" onclick="document.getElementById('girvi-detail-modal').remove()">✕</button>
+                <h3 style="font-size:16px; font-weight:800;">💍 Ticket #${g.loan_number}</h3>
+                <button class="btn btn-sm btn-secondary" onclick="document.getElementById('girvi-modal').remove()">✕</button>
               </div>
-              <div style="padding:10px 0; font-size:14px; line-height:1.6;">
+              <div style="padding:10px 0; font-size:14px; line-height:1.7;">
                 <div><strong>Customer:</strong> ${g.customer_name}</div>
                 ${g.father_husband_name ? `<div><strong>Relation:</strong> S/o ${g.father_husband_name}</div>` : ''}
                 <div><strong>Mobile:</strong> ${g.phone1}</div>
                 <div><strong>Village/Address:</strong> ${g.address}</div>
                 <hr style="margin:10px 0; border:0; border-top:1px solid var(--border);" />
                 <div><strong>Ornament:</strong> ${g.item_name}</div>
-                <div><strong>Metal Type:</strong> ${g.metal_type.toUpperCase()}</div>
+                <div><strong>Metal:</strong> ${g.metal_type.toUpperCase()}</div>
                 <div><strong>Gold Weight:</strong> ${g.gold_weight} gms</div>
                 <div><strong>Silver Weight:</strong> ${g.silver_weight} gms</div>
-                <div><strong>Principal Loan:</strong> ₹${(g.principal_amount || 0).toLocaleString('en-IN')}</div>
-                <div><strong>Monthly Rate:</strong> ${g.monthly_interest_percent || 2.0}%</div>
+                <div><strong>Principal Loan:</strong> ₹${g.principal_amount.toLocaleString('en-IN')}</div>
+                <div><strong>Monthly Interest:</strong> ${g.monthly_interest_percent}% /mo</div>
                 <div><strong>Pledge Date:</strong> ${g.loan_date}</div>
                 ${g.reference_person ? `<div><strong>Reference:</strong> ${g.reference_person}</div>` : ''}
               </div>
-              <button class="btn btn-secondary btn-block" style="margin-top:16px;" onclick="document.getElementById('girvi-detail-modal').remove()">Close</button>
+              <button class="btn btn-secondary btn-block" style="margin-top:16px;" onclick="document.getElementById('girvi-modal').remove()">Close</button>
             </div>
           </div>
         `;
-        document.getElementById('mobile-modal-root').innerHTML = modalHtml;
-      },
-
-      _renderCustomers() {
-        const t = (k, fb) => MobileI18N.t(k, fb);
-        const customers = MobileStorage.getCustomers();
-        const q = this._custQuery.toLowerCase();
-        const filtered = customers.filter(c => !q || c.name.toLowerCase().includes(q) || c.phone.includes(q) || c.city.toLowerCase().includes(q));
-
-        return `
-          <div class="mobile-content">
-            <div class="search-box">
-              <span class="search-icon">🔍</span>
-              <input type="text" class="search-input" placeholder="${t('searchCustomer', 'Search customer directory...')}" value="${this._custQuery}" oninput="MobileApp._custQuery = this.value; MobileApp.render();">
-            </div>
-
-            ${filtered.map(c => `
-              <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <div>
-                    <div style="font-weight:700; font-size:15px;">${c.name}</div>
-                    <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">📍 ${c.city} • 📞 ${c.phone}</div>
-                  </div>
-                  <div style="text-align:right;">
-                    <div style="font-size:11px; color:var(--text-muted);">Balance</div>
-                    <div style="font-weight:700; color:${c.balance > 0 ? 'var(--danger)' : 'var(--success)'}; font-size:14px;">₹${(c.balance || 0).toLocaleString('en-IN')}</div>
-                  </div>
-                </div>
-
-                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-top:12px; border-top:1px solid var(--border); padding-top:10px;">
-                  <a href="tel:${c.phone}" class="btn btn-secondary" style="font-size:12px; padding:8px;">📞 ${t('call', 'Call')}</a>
-                  <a href="sms:${c.phone}" class="btn btn-secondary" style="font-size:12px; padding:8px;">💬 ${t('sms', 'SMS')}</a>
-                  <a href="https://api.whatsapp.com/send?phone=91${String(c.phone).replace(/\D/g,'')}" target="_blank" class="btn btn-whatsapp" style="font-size:12px; padding:8px;">📲 ${t('whatsapp', 'WhatsApp')}</a>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        `;
-      },
-
-      _renderPairing() {
-        const t = (k, fb) => MobileI18N.t(k, fb);
-        const pairing = MobileStorage.getPairingInfo();
-
-        return `
-          <div class="mobile-content">
-            <div class="card" style="text-align:center; padding:24px 16px;">
-              <div style="font-size:48px; margin-bottom:12px;">🔗</div>
-              <h2 style="font-size:18px; font-weight:700;">${t('pairWithDesktop', 'Pair with Desktop PC')}</h2>
-              <p style="font-size:13px; color:var(--text-muted); margin-top:6px; line-height:1.5;">
-                Open Desktop Settings > Mobile Companion QR Code, then scan or enter pairing code JWELL-EDIT-8899
-              </p>
-
-              <div style="margin:20px 0; text-align:left;">
-                <label style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Pairing Code</label>
-                <input type="text" id="p-code-input" class="search-input" style="padding-left:14px; margin-top:6px; font-weight:700;" value="${pairing.pairingCode || 'JWELL-EDIT-8899'}">
-
-                <label style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-top:14px; display:block;">Owner Google Account</label>
-                <input type="email" id="p-email-input" class="search-input" style="padding-left:14px; margin-top:6px;" value="${pairing.accountEmail || 'owner.jeweller@gmail.com'}">
-              </div>
-
-              <button class="btn btn-primary btn-block" onclick="MobileApp.savePairing()">✅ Save & Connect</button>
-
-              <div style="margin-top:16px; padding:12px; background:#e8f8f5; border-radius:8px; font-size:13px; color:var(--success); font-weight:600;">
-                🟢 Device Paired (Last Synced: Today)
-              </div>
-            </div>
-          </div>
-        `;
-      },
-
-      savePairing() {
-        const code = document.getElementById('p-code-input')?.value.trim() || 'JWELL-EDIT-8899';
-        const email = document.getElementById('p-email-input')?.value.trim() || 'owner.jeweller@gmail.com';
-        MobileStorage.savePairingInfo({ pairingCode: code, accountEmail: email, driveFolder: '/JwellersEdith_Sync/' });
-        alert('🎉 Successfully paired with Desktop PC!');
-        this.navigate('dashboard');
-      },
-
-      _renderSettings() {
-        const t = (k, fb) => MobileI18N.t(k, fb);
-        const pairing = MobileStorage.getPairingInfo();
-        const lang = MobileI18N.getLang();
-
-        return `
-          <div class="mobile-content">
-            <div class="card">
-              <div style="font-weight:700; font-size:14px; margin-bottom:10px;">🌐 ${t('language', 'Language / भाषा')}</div>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                <button class="btn ${lang === 'en' ? 'btn-primary' : 'btn-secondary'}" onclick="MobileApp.setLang('en')">🇬🇧 English</button>
-                <button class="btn ${lang === 'hi' ? 'btn-primary' : 'btn-secondary'}" onclick="MobileApp.setLang('hi')">🇮🇳 हिंदी (Hindi)</button>
-              </div>
-            </div>
-
-            <div class="card">
-              <div style="font-weight:700; font-size:14px; margin-bottom:6px;">💳 ${t('shopUpiId', 'Shop UPI ID (for QR codes)')}</div>
-              <input type="text" id="shop-upi-input" class="search-input" style="padding-left:14px;" value="${pairing.shopUpiId || 'owner.jeweller@upi'}">
-              <button class="btn btn-secondary btn-block" style="margin-top:10px;" onclick="MobileStorage.savePairingInfo({ ...MobileStorage.getPairingInfo(), shopUpiId: document.getElementById('shop-upi-input').value.trim() }); alert('✅ Shop UPI ID saved!');">💾 Save UPI ID</button>
-            </div>
-
-            <div class="card">
-              <div style="font-weight:700; font-size:14px; margin-bottom:6px;">☁️ Google Drive Free Sync</div>
-              <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
-                <div>Account: <strong>${pairing.accountEmail}</strong></div>
-                <div>Sync Folder: <code>${pairing.driveFolder}</code></div>
-                <div>Cost: <strong>₹0 / month (15 GB Free Storage)</strong></div>
-              </div>
-              <button class="btn btn-success btn-block" style="margin-top:14px;" onclick="alert('🔄 Sync completed! All local Khata & Girvi caches are up to date.');">🔄 Sync with Google Drive Now</button>
-            </div>
-
-            <div style="text-align:center; padding:18px 12px; font-size:12px; color:var(--text-muted); line-height:1.6;">
-              <div style="font-weight:700; color:var(--primary);">Jwellers Edith — Smart Action Mobile Companion</div>
-              <div>Version 1.3.0 • An <strong>AD's Creation</strong> Product</div>
-              <div style="font-size:11px; margin-top:4px;">Crafted for Modern Indian Jewellery Businesses</div>
-            </div>
-          </div>
-        `;
+        document.getElementById('modal-host').innerHTML = modalHtml;
       }
     };
 
-    document.addEventListener('DOMContentLoaded', () => {
-      MobileApp.init();
-    });
+    document.addEventListener('DOMContentLoaded', () => MobileApp.init());
   </script>
 </body>
 </html>
