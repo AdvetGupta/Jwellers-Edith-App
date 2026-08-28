@@ -48,7 +48,7 @@ const SettingsScreen = {
         <!-- App Version & Developer Reference -->
         <div style="text-align:center; padding:18px 12px; font-size:12px; color:var(--text-muted); line-height:1.6;">
           <div style="font-weight:700; color:var(--primary);">Jwellers Edith — Smart Action Mobile Companion</div>
-          <div>Version 1.3.0 • Developed by <strong>Advet Gupta</strong></div>
+          <div>Version 1.3.0 • An <strong>AD's Creation</strong> Product</div>
           <div style="font-size:11px; margin-top:4px;">Crafted for Modern Indian Jewellery Businesses</div>
         </div>
       </div>
