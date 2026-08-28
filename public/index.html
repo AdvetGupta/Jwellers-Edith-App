@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -27,8 +27,26 @@
       --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
       --shadow: 0 6px 16px rgba(0,0,0,0.06);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-    body { background: #e2e8f0; color: var(--text-main); margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; }
+
+    /* Premium Dark Theme */
+    [data-theme="dark"] {
+      --bg-app: #0f172a;
+      --bg-card: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --primary-light: #2d2614;
+      --shadow-sm: 0 2px 6px rgba(0,0,0,0.25);
+      --shadow: 0 6px 20px rgba(0,0,0,0.35);
+    }
+
+    * {
+      box-sizing: border-box; margin: 0; padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+    body { background: #0b0f19; color: var(--text-main); margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; }
     
     #mobile-frame {
       width: 100%;
@@ -36,7 +54,7 @@
       min-height: 100vh;
       background: var(--bg-app);
       position: relative;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
       display: flex;
       flex-direction: column;
       padding-bottom: 75px;
@@ -52,13 +70,25 @@
       box-shadow: var(--shadow-sm);
     }
     .app-logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 17px; color: var(--primary-dark); }
+    [data-theme="dark"] .app-logo { color: var(--primary); }
     .app-logo img { width: 24px; height: 24px; border-radius: 6px; }
+    
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+    .theme-toggle-btn {
+      background: var(--bg-app); border: 1px solid var(--border);
+      color: var(--text-main); font-size: 14px; width: 32px; height: 32px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+
     .sync-status-pill {
       font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 20px;
       display: flex; align-items: center; gap: 6px; cursor: pointer;
       background: #e6fffa; color: #234e52; border: 1px solid #b2f5ea;
     }
+    [data-theme="dark"] .sync-status-pill { background: #064e3b; color: #a7f3d0; border-color: #047857; }
     .sync-status-pill.unpaired { background: #edf2f7; color: #4a5568; border-color: #cbd5e0; }
+    [data-theme="dark"] .sync-status-pill.unpaired { background: #1e293b; color: #94a3b8; border-color: #334155; }
     .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); }
     .unpaired .dot { background: var(--text-muted); }
 
@@ -68,14 +98,14 @@
       position: fixed; bottom: 0; width: 100%; max-width: 440px;
       background: var(--bg-card); border-top: 1px solid var(--border);
       display: flex; justify-content: space-around; padding: 10px 0;
-      z-index: 200; box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+      z-index: 200; box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
     }
     .nav-btn {
       display: flex; flex-direction: column; align-items: center;
       gap: 3px; border: none; background: none; color: var(--text-muted);
       font-size: 11px; font-weight: 700; cursor: pointer; flex: 1;
     }
-    .nav-btn.active { color: var(--primary-dark); }
+    .nav-btn.active { color: var(--primary); }
     .nav-btn .icon { font-size: 20px; }
 
     .card {
@@ -107,13 +137,14 @@
     .search-icon { position: absolute; left: 12px; top: 12px; color: var(--text-muted); }
     .search-input {
       width: 100%; padding: 12px 14px 12px 38px; border-radius: 10px;
-      border: 1px solid var(--border); font-size: 14px; background: var(--bg-card); outline: none;
+      border: 1px solid var(--border); font-size: 14px; background: var(--bg-card);
+      color: var(--text-main); outline: none;
     }
     .search-input:focus { border-color: var(--primary); }
 
     .modal-backdrop {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.6); display: flex; align-items: flex-end; justify-content: center;
+      background: rgba(0,0,0,0.7); display: flex; align-items: flex-end; justify-content: center;
       z-index: 500;
     }
     .modal-sheet {
@@ -128,7 +159,7 @@
     .wizard-icon img { width: 72px; height: 72px; border-radius: 16px; margin-bottom: 12px; }
     .wizard-title { font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 6px; }
     .wizard-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
-    .step-pill { display: inline-block; padding: 4px 12px; border-radius: 12px; background: var(--primary-light); color: var(--primary-dark); font-size: 11px; font-weight: 800; margin-bottom: 14px; }
+    .step-pill { display: inline-block; padding: 4px 12px; border-radius: 12px; background: var(--primary-light); color: var(--primary); font-size: 11px; font-weight: 800; margin-bottom: 14px; }
     .progress-track { height: 6px; background: var(--border); border-radius: 4px; overflow: hidden; margin: 16px 0; }
     .progress-bar { height: 100%; background: var(--success); width: 0%; transition: width 0.4s ease; }
   </style>
@@ -148,6 +179,7 @@
       lastSyncedAt: null,
       currentScreen: 'dashboard',
       lang: 'en',
+      theme: 'light',
       khataList: [
         {
           id: 1, name: 'Ramesh Patel', phone: '9822112233', city: 'Indapur', dues: 18500,
@@ -259,7 +291,8 @@
             activeKhataDues: "Active Khata Dues", activeGirvi: "Active Girvi",
             goldPledged: "Gold Pledged", silverPledged: "Silver Pledged",
             searchKhata: "Search customer or phone...", searchGirvi: "Search Girvi #, name, phone...",
-            whatsappReminder: "WhatsApp", upiQr: "UPI QR", details: "Passbook", pay: "Pay", photo: "Photo"
+            whatsappReminder: "WhatsApp", upiQr: "UPI QR", details: "Passbook", pay: "Pay", photo: "Photo",
+            theme: "Appearance / थीम", light: "☀️ Light Mode", dark: "🌙 Dark Mode"
           },
           hi: {
             appName: "ज्वेलर्स एडिथ", dashboard: "डैशबोर्ड", khata: "खाता", girvi: "गिरवी",
@@ -268,7 +301,8 @@
             activeKhataDues: "कुल खाता बकाया", activeGirvi: "सक्रिय गिरवी",
             goldPledged: "जमा सोना (ग्राम)", silverPledged: "जमा चांदी (ग्राम)",
             searchKhata: "ग्राहक या फोन नंबर खोजें...", searchGirvi: "गिरवी नं., नाम, फोन खोजें...",
-            whatsappReminder: "व्हाट्सएप", upiQr: "UPI QR", details: "पासबुक", pay: "जमा लें", photo: "फोटो"
+            whatsappReminder: "व्हाट्सएप", upiQr: "UPI QR", details: "पासबुक", pay: "जमा लें", photo: "फोटो",
+            theme: "थीम / Appearance", light: "☀️ लाइट मोड", dark: "🌙 डार्क मोड"
           }
         };
         return (dict[State.lang] && dict[State.lang][k]) || k;
@@ -284,6 +318,19 @@
           const saved = localStorage.getItem('je_mobile_state');
           if (saved) Object.assign(State, JSON.parse(saved));
         } catch(e) {}
+        this.applyTheme(State.theme || 'light');
+        this.render();
+      },
+
+      applyTheme(t) {
+        State.theme = t;
+        document.documentElement.setAttribute('data-theme', t);
+        this.saveState();
+      },
+
+      toggleTheme() {
+        const next = State.theme === 'dark' ? 'light' : 'dark';
+        this.applyTheme(next);
         this.render();
       },
 
@@ -295,7 +342,8 @@
             pairingCode: State.pairingCode,
             shopUpiId: State.shopUpiId,
             lastSyncedAt: State.lastSyncedAt,
-            lang: State.lang
+            lang: State.lang,
+            theme: State.theme
           }));
         } catch(e) {}
       },
@@ -321,9 +369,14 @@
               <img src="icon.png" alt="Logo" />
               <span>${I18N.t('appName')}</span>
             </div>
-            <div class="sync-status-pill" onclick="MobileApp.showSyncSheet()">
-              <span class="dot"></span>
-              <span>${I18N.t('connected')}</span>
+            <div class="header-actions">
+              <button class="theme-toggle-btn" onclick="MobileApp.toggleTheme()" title="Toggle Dark/Light">
+                ${State.theme === 'dark' ? '☀️' : '🌙'}
+              </button>
+              <div class="sync-status-pill" onclick="MobileApp.showSyncSheet()">
+                <span class="dot"></span>
+                <span>${I18N.t('connected')}</span>
+              </div>
             </div>
           </header>
 
@@ -368,7 +421,7 @@
         const silverWt = State.girviList.reduce((s, g) => s + (g.silver_weight || 0), 0);
 
         return `
-          <div class="card" style="background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%); border-left: 4px solid var(--primary);">
+          <div class="card" style="border-left: 4px solid var(--primary);">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <div>
                 <div style="font-size:11px; font-weight:700; color:var(--primary);">${I18N.t('goldRate')}</div>
@@ -418,7 +471,6 @@
         `;
       },
 
-      // --- Smooth Non-Interrupting Search for Khata ---
       _renderKhata() {
         return `
           <div class="search-box">
@@ -558,7 +610,6 @@
         document.getElementById('modal-host').innerHTML = modalHtml;
       },
 
-      // --- Smooth Non-Interrupting Search for Girvi ---
       _renderGirvi() {
         return `
           <div class="search-box">
@@ -590,7 +641,7 @@
             <div class="card" style="border-left: 4px solid var(--primary);">
               <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <div>
-                  <div style="font-size:12px; font-weight:800; color:var(--primary-dark);">${g.loan_number}</div>
+                  <div style="font-size:12px; font-weight:800; color:var(--primary);">${g.loan_number}</div>
                   <div style="font-weight:700; font-size:15px; margin-top:2px;">${g.customer_name}</div>
                   <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">📍 ${g.address} • 📞 ${g.phone1}</div>
                 </div>
@@ -772,7 +823,6 @@
         window.open(`https://api.whatsapp.com/send?phone=91${p}&text=${encodeURIComponent(msg)}`, '_blank');
       },
 
-      // --- Smooth Non-Interrupting Search for Customers ---
       _renderCustomers() {
         return `
           <div class="search-box">
@@ -822,6 +872,14 @@
       _renderSettings() {
         return `
           <div class="card">
+            <div style="font-weight:700; font-size:14px; margin-bottom:10px;">🌓 ${I18N.t('theme')}</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <button class="btn ${State.theme === 'light' ? 'btn-primary' : 'btn-secondary'}" onclick="MobileApp.applyTheme('light'); MobileApp.render();">${I18N.t('light')}</button>
+              <button class="btn ${State.theme === 'dark' ? 'btn-primary' : 'btn-secondary'}" onclick="MobileApp.applyTheme('dark'); MobileApp.render();">${I18N.t('dark')}</button>
+            </div>
+          </div>
+
+          <div class="card">
             <div style="font-weight:700; font-size:14px; margin-bottom:10px;">🌐 Language / भाषा</div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
               <button class="btn ${State.lang === 'en' ? 'btn-primary' : 'btn-secondary'}" onclick="State.lang = 'en'; MobileApp.saveState(); MobileApp.render();">🇬🇧 English</button>
@@ -854,7 +912,6 @@
         `;
       },
 
-      // --- Pure Direct Setup Wizard (No Demo Bypass) ---
       _renderOnboardingWizard() {
         let stepHtml = '';
         if (this._wizardStep === 1) {
