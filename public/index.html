@@ -28,7 +28,6 @@
       --shadow: 0 6px 16px rgba(0,0,0,0.06);
     }
 
-    /* Premium Dark Theme */
     [data-theme="dark"] {
       --bg-app: #0f172a;
       --bg-card: #1e293b;
@@ -175,7 +174,7 @@
       pairingCode: 'JWELL-EDIT-8899',
       accountEmail: '',
       driveFolder: '/JwellersEdith_Sync/',
-      shopUpiId: 'owner.jeweller@upi',
+      shopUpiId: '',
       lastSyncedAt: null,
       currentScreen: 'dashboard',
       lang: 'en',
@@ -461,7 +460,7 @@
             <div>
               <div style="font-weight:700; font-size:13px;">☁️ Google Drive Free Sync</div>
               <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">
-                Connected: <strong>${State.accountEmail || 'owner.jeweller@gmail.com'}</strong>
+                Connected: <strong>${State.accountEmail || 'Your Shop Gmail'}</strong>
               </div>
             </div>
             <button class="btn btn-sm btn-primary" onclick="MobileApp.showSyncSheet()">
@@ -889,7 +888,7 @@
 
           <div class="card">
             <div style="font-weight:700; font-size:14px; margin-bottom:6px;">💳 Shop UPI ID (for QR codes)</div>
-            <input type="text" id="upi-field" class="search-input" style="padding-left:14px;" value="${State.shopUpiId}">
+            <input type="text" id="upi-field" class="search-input" style="padding-left:14px;" placeholder="e.g. 9876543210@paytm" value="${State.shopUpiId || ''}">
             <button class="btn btn-secondary btn-block" style="margin-top:10px;" onclick="State.shopUpiId = document.getElementById('upi-field').value.trim(); MobileApp.saveState(); alert('✅ Saved UPI ID!');">💾 Save UPI ID</button>
           </div>
 
@@ -897,7 +896,7 @@
             <div style="font-weight:700; font-size:14px; margin-bottom:6px;">☁️ Desktop PC Pairing</div>
             <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
               <div>Status: <strong>${State.isPaired ? '🟢 Connected to PC' : '⚪ Unpaired'}</strong></div>
-              <div>Account: <strong>${State.accountEmail || 'owner.jeweller@gmail.com'}</strong></div>
+              <div>Account: <strong>${State.accountEmail || 'Your Shop Gmail'}</strong></div>
               <div>Pairing Code: <code>${State.pairingCode}</code></div>
             </div>
             <button class="btn btn-secondary btn-block" style="margin-top:12px;" onclick="MobileApp.resetOnboarding()">
@@ -922,14 +921,15 @@
               </div>
               <span class="step-pill">DESKTOP PAIRING</span>
               <h2 class="wizard-title">Pair with Desktop PC</h2>
-              <p class="wizard-desc">Open <strong>Desktop Software > Settings > Mobile Companion QR</strong> and enter the pairing code shown on your computer screen.</p>
+              <p class="wizard-desc">Open <strong>Desktop Software > Settings > Mobile Companion QR</strong> and enter the pairing code and your real Google Account.</p>
               
               <div style="text-align:left; margin:16px 0;">
-                <label style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Pairing Code</label>
-                <input type="text" id="wiz-code" class="search-input" style="padding-left:14px; font-weight:800; font-size:16px; letter-spacing:1px; margin-top:6px;" value="JWELL-EDIT-8899">
+                <label style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Desktop Pairing Code</label>
+                <input type="text" id="wiz-code" class="search-input" style="padding-left:14px; font-weight:800; font-size:16px; letter-spacing:1px; margin-top:6px;" placeholder="e.g. JWELL-EDIT-8899" value="JWELL-EDIT-8899">
 
-                <label style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-top:14px; display:block;">Your Google Email (@gmail.com)</label>
-                <input type="email" id="wiz-email" class="search-input" style="padding-left:14px; margin-top:6px;" placeholder="owner.jeweller@gmail.com" value="owner.jeweller@gmail.com">
+                <label style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-top:14px; display:block;">Your Real Shop Gmail Account</label>
+                <input type="email" id="wiz-email" class="search-input" style="padding-left:14px; margin-top:6px;" placeholder="Enter your real email (e.g. yourshop@gmail.com)" value="${State.accountEmail || ''}">
+                <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">* Must be the same Gmail connected in your Desktop PC settings</div>
               </div>
 
               <button class="btn btn-primary btn-block" style="padding:14px; font-size:15px;" onclick="MobileApp.startSyncProcess()">
@@ -945,14 +945,14 @@
               </div>
               <span class="step-pill" style="background:#c6f6d5; color:#22543d;">CONNECTING</span>
               <h2 class="wizard-title" id="sync-title">Connecting to Google Drive...</h2>
-              <p class="wizard-desc" id="sync-desc">Establishing secure handshake with /JwellersEdith_Sync/ on your 15 GB free Drive storage.</p>
+              <p class="wizard-desc" id="sync-desc">Establishing secure handshake with /JwellersEdith_Sync/ on your personal Drive storage.</p>
               
               <div class="progress-track">
                 <div class="progress-bar" id="wiz-bar"></div>
               </div>
 
               <div id="sync-log" style="text-align:left; background:var(--bg-card); padding:12px; border-radius:10px; font-size:12px; font-family:monospace; line-height:1.6; border:1px solid var(--border); max-height:140px; overflow-y:auto;">
-                <div>⏳ Handshaking with JWELL-EDIT-8899...</div>
+                <div>⏳ Handshaking with ${State.pairingCode || 'JWELL-EDIT-8899'}...</div>
               </div>
             </div>
           `;
@@ -968,8 +968,16 @@
       },
 
       startSyncProcess() {
-        State.pairingCode = document.getElementById('wiz-code')?.value.trim() || 'JWELL-EDIT-8899';
-        State.accountEmail = document.getElementById('wiz-email')?.value.trim() || 'owner.jeweller@gmail.com';
+        const codeInput = document.getElementById('wiz-code')?.value.trim() || 'JWELL-EDIT-8899';
+        const emailInput = document.getElementById('wiz-email')?.value.trim();
+
+        if (!emailInput || !emailInput.includes('@')) {
+          alert('⚠️ Please enter your real Gmail address (e.g. yourshop@gmail.com) so the app can connect to your Google Drive!');
+          return;
+        }
+
+        State.pairingCode = codeInput;
+        State.accountEmail = emailInput;
         this._wizardStep = 2;
         this.render();
 
@@ -991,7 +999,7 @@
         setTimeout(() => {
           if (bar) bar.style.width = '100%';
           if (title) title.textContent = '🎉 All Synced & Ready!';
-          if (desc) desc.textContent = 'Your mobile device is now paired and 100% offline-ready.';
+          if (desc) desc.textContent = 'Your mobile device is now paired with ' + State.accountEmail + ' and 100% offline-ready.';
           if (log) log.innerHTML += '<div style="color:var(--success); font-weight:700;">✅ Handshake Complete! Passbook & Girvi ready.</div>';
           State.isPaired = true;
           State.lastSyncedAt = new Date().toLocaleTimeString();
@@ -1018,7 +1026,7 @@
                 <button class="btn btn-sm btn-secondary" onclick="document.getElementById('sync-sheet').remove()">✕</button>
               </div>
               <div style="background:var(--bg-app); padding:14px; border-radius:12px; font-size:13px; line-height:1.6; margin-bottom:14px;">
-                <div>Account: <strong>${State.accountEmail || 'owner.jeweller@gmail.com'}</strong></div>
+                <div>Account: <strong>${State.accountEmail || 'Your Shop Gmail'}</strong></div>
                 <div>Sync Folder: <code>/JwellersEdith_Sync/</code></div>
                 <div>Status: <strong style="color:var(--success);">🟢 Connected & Synced</strong></div>
                 <div>Last Synchronized: <strong>${State.lastSyncedAt || 'Just Now'}</strong></div>
@@ -1038,20 +1046,23 @@
       triggerInstantSync() {
         const sheet = document.getElementById('sync-sheet');
         if (sheet) sheet.remove();
-        alert('🔄 Delta sync completed! Local Khata & Girvi caches are 100% up-to-date.');
+        alert('🔄 Delta sync completed! Local Khata & Girvi caches are 100% up-to-date with ' + State.accountEmail);
         State.lastSyncedAt = new Date().toLocaleTimeString();
         this.saveState();
         this.render();
       },
 
       sendWhatsApp(phone, name, dues) {
-        let msg = `Namaste *${name} ji* 🙏\n\nThis is a polite reminder regarding your outstanding Khata balance at *Jwellers Edith*.\n\n• *Pending Balance Dues:* ₹${Number(dues).toLocaleString('en-IN')}\n• *Shop UPI ID:* \`${State.shopUpiId}\`\n\nKindly clear your dues at your earliest convenience.\n\nThank you!\n- *Jwellers Edith*`;
+        let msg = `Namaste *${name} ji* 🙏\n\nThis is a polite reminder regarding your outstanding Khata balance at *Jwellers Edith*.\n\n• *Pending Balance Dues:* ₹${Number(dues).toLocaleString('en-IN')}\n`;
+        if (State.shopUpiId) msg += `• *Shop UPI ID:* \`${State.shopUpiId}\`\n`;
+        msg += `\nKindly clear your dues at your earliest convenience.\n\nThank you!\n- *Jwellers Edith*`;
         const p = String(phone).replace(/\D/g, '');
         window.open(`https://api.whatsapp.com/send?phone=91${p}&text=${encodeURIComponent(msg)}`, '_blank');
       },
 
       showUpiQr(name, dues) {
-        const uri = `upi://pay?pa=${encodeURIComponent(State.shopUpiId)}&pn=Jwellers%20Edith&am=${parseFloat(dues).toFixed(2)}&cu=INR&tn=${encodeURIComponent('Khata Dues - ' + name)}`;
+        const upi = State.shopUpiId || 'owner.jeweller@upi';
+        const uri = `upi://pay?pa=${encodeURIComponent(upi)}&pn=Jwellers%20Edith&am=${parseFloat(dues).toFixed(2)}&cu=INR&tn=${encodeURIComponent('Khata Dues - ' + name)}`;
         const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(uri)}`;
 
         const modalHtml = `
@@ -1065,7 +1076,7 @@
                 <img src="${qrUrl}" alt="UPI QR" style="width:230px; height:230px; border-radius:12px; border:2px solid var(--border);" />
                 <div style="font-weight:800; font-size:24px; color:var(--primary); margin-top:12px;">₹${Number(dues).toLocaleString('en-IN')}</div>
                 <div style="font-size:13px; color:var(--text-muted); margin-top:2px;">Scan with GPay, PhonePe, Paytm or any UPI App</div>
-                <div style="font-size:12px; font-family:monospace; background:var(--bg-app); padding:6px 12px; border-radius:6px; margin-top:10px; display:inline-block;">${State.shopUpiId}</div>
+                <div style="font-size:12px; font-family:monospace; background:var(--bg-app); padding:6px 12px; border-radius:6px; margin-top:10px; display:inline-block;">${upi}</div>
               </div>
               <button class="btn btn-secondary btn-block" style="margin-top:16px;" onclick="document.getElementById('upi-modal').remove()">Close</button>
             </div>
