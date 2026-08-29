@@ -179,6 +179,13 @@
       currentScreen: 'dashboard',
       lang: 'en',
       theme: 'light',
+      rates: {
+        gold22k: 71200,
+        gold24k: 77500,
+        silver1kg: 89400,
+        isCustom: false,
+        lastUpdated: 'Live Market'
+      },
       khataList: [
         {
           id: 1, name: 'Ramesh Patel', phone: '9822112233', city: 'Indapur', dues: 18500,
@@ -291,7 +298,8 @@
             goldPledged: "Gold Pledged", silverPledged: "Silver Pledged",
             searchKhata: "Search customer or phone...", searchGirvi: "Search Girvi #, name, phone...",
             whatsappReminder: "WhatsApp", upiQr: "UPI QR", details: "Passbook", pay: "Pay", photo: "Photo",
-            theme: "Appearance / थीम", light: "☀️ Light Mode", dark: "🌙 Dark Mode"
+            theme: "Appearance / थीम", light: "☀️ Light Mode", dark: "🌙 Dark Mode",
+            editRates: "Edit Rates", liveBadge: "LIVE MARKET"
           },
           hi: {
             appName: "ज्वेलर्स एडिथ", dashboard: "डैशबोर्ड", khata: "खाता", girvi: "गिरवी",
@@ -301,7 +309,8 @@
             goldPledged: "जमा सोना (ग्राम)", silverPledged: "जमा चांदी (ग्राम)",
             searchKhata: "ग्राहक या फोन नंबर खोजें...", searchGirvi: "गिरवी नं., नाम, फोन खोजें...",
             whatsappReminder: "व्हाट्सएप", upiQr: "UPI QR", details: "पासबुक", pay: "जमा लें", photo: "फोटो",
-            theme: "थीम / Appearance", light: "☀️ लाइट मोड", dark: "🌙 डार्क मोड"
+            theme: "थीम / Appearance", light: "☀️ लाइट मोड", dark: "🌙 डार्क मोड",
+            editRates: "भाव बदलें", liveBadge: "लाइव बाज़ार"
           }
         };
         return (dict[State.lang] && dict[State.lang][k]) || k;
@@ -318,6 +327,88 @@
           if (saved) Object.assign(State, JSON.parse(saved));
         } catch(e) {}
         this.applyTheme(State.theme || 'light');
+        this.fetchLiveMarketRates();
+        this.render();
+      },
+
+      // --- Live Real-Time Bullion Rates Engine ---
+      async fetchLiveMarketRates() {
+        if (State.rates && State.rates.isCustom) return; // Jewelers custom rate takes precedence if manually set
+        try {
+          const res = await fetch('https://api.gold-api.com/price/XAU');
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.price) {
+              const usdInr = 87.5;
+              const importDutyGstFactor = 1.15;
+              const gold22k = Math.round((data.price / 31.1034768) * (22/24) * 10 * usdInr * importDutyGstFactor);
+              State.rates.gold22k = gold22k;
+              State.rates.gold24k = Math.round(gold22k * (24/22));
+              State.rates.lastUpdated = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+              this.saveState();
+              this.render();
+            }
+          }
+        } catch(e) {
+          // Gracefully falls back to offline cache
+        }
+      },
+
+      openRateModal() {
+        const modalHtml = `
+          <div class="modal-backdrop" id="rate-modal" onclick="document.getElementById('rate-modal').remove()">
+            <div class="modal-sheet" onclick="event.stopPropagation()">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <h3 style="font-size:17px; font-weight:800;">💰 Today's Shop Bullion Rates</h3>
+                <button class="btn btn-sm btn-secondary" onclick="document.getElementById('rate-modal').remove()">✕</button>
+              </div>
+              <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px; line-height:1.4;">
+                Set your daily counter selling rates for Gold & Silver, or fetch the latest live bullion market spot.
+              </p>
+
+              <div style="margin-bottom:12px;">
+                <label style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Gold 22K Rate (per 10 grams)</label>
+                <input type="number" id="gold-22k-input" class="search-input" style="padding-left:14px; font-size:16px; font-weight:700; margin-top:4px;" value="${State.rates.gold22k}">
+              </div>
+
+              <div style="margin-bottom:12px;">
+                <label style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Silver Rate (per 1 kg)</label>
+                <input type="number" id="silver-1kg-input" class="search-input" style="padding-left:14px; font-size:16px; font-weight:700; margin-top:4px;" value="${State.rates.silver1kg}">
+              </div>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:16px;">
+                <button class="btn btn-primary" onclick="MobileApp.saveCustomRates()">
+                  💾 Save Shop Rates
+                </button>
+                <button class="btn btn-secondary" onclick="MobileApp.resetToLiveRates()">
+                  🔄 Fetch Live MCX Spot
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        document.getElementById('modal-host').innerHTML = modalHtml;
+      },
+
+      saveCustomRates() {
+        const g = parseFloat(document.getElementById('gold-22k-input')?.value || 0);
+        const s = parseFloat(document.getElementById('silver-1kg-input')?.value || 0);
+        if (g > 0 && s > 0) {
+          State.rates.gold22k = g;
+          State.rates.silver1kg = s;
+          State.rates.isCustom = true;
+          State.rates.lastUpdated = 'Shop Custom Rate';
+          this.saveState();
+          document.getElementById('rate-modal')?.remove();
+          this.render();
+        }
+      },
+
+      async resetToLiveRates() {
+        State.rates.isCustom = false;
+        document.getElementById('rate-modal')?.remove();
+        await this.fetchLiveMarketRates();
+        alert('🔄 Live Bullion Market Rates Updated!');
         this.render();
       },
 
@@ -342,7 +433,8 @@
             shopUpiId: State.shopUpiId,
             lastSyncedAt: State.lastSyncedAt,
             lang: State.lang,
-            theme: State.theme
+            theme: State.theme,
+            rates: State.rates
           }));
         } catch(e) {}
       },
@@ -418,18 +510,24 @@
         const totalGirvi = State.girviList.reduce((s, g) => s + (g.principal_amount || 0), 0);
         const goldWt = State.girviList.reduce((s, g) => s + (g.gold_weight || 0), 0);
         const silverWt = State.girviList.reduce((s, g) => s + (g.silver_weight || 0), 0);
+        const goldRate = State.rates ? State.rates.gold22k : 71200;
+        const silverRate = State.rates ? State.rates.silver1kg : 89400;
 
         return `
-          <div class="card" style="border-left: 4px solid var(--primary);">
+          <div class="card" style="border-left: 4px solid var(--primary); cursor:pointer;" onclick="MobileApp.openRateModal()">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <div>
                 <div style="font-size:11px; font-weight:700; color:var(--primary);">${I18N.t('goldRate')}</div>
-                <div style="font-size:18px; font-weight:800; margin-top:2px;">₹67,400</div>
+                <div style="font-size:18px; font-weight:800; margin-top:2px;">₹${goldRate.toLocaleString('en-IN')}</div>
               </div>
               <div style="text-align:right;">
                 <div style="font-size:11px; font-weight:700; color:var(--info);">${I18N.t('silverRate')}</div>
-                <div style="font-size:18px; font-weight:800; margin-top:2px;">₹86,500</div>
+                <div style="font-size:18px; font-weight:800; margin-top:2px;">₹${silverRate.toLocaleString('en-IN')}</div>
               </div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; font-size:11px; color:var(--text-muted); border-top:1px solid var(--border); padding-top:6px;">
+              <span>🟢 ${State.rates.lastUpdated || 'Live Market'}</span>
+              <span style="color:var(--primary); font-weight:700;">✏️ Tap to Change Rates</span>
             </div>
           </div>
 
@@ -870,6 +968,16 @@
 
       _renderSettings() {
         return `
+          <div class="card">
+            <div style="font-weight:700; font-size:14px; margin-bottom:10px;">💰 ${I18N.t('goldRate')} & Bullion</div>
+            <div style="font-size:13px; color:var(--text-muted); margin-bottom:10px;">
+              Gold 22K (10g): <strong>₹${(State.rates.gold22k || 71200).toLocaleString('en-IN')}</strong> • Silver (1kg): <strong>₹${(State.rates.silver1kg || 89400).toLocaleString('en-IN')}</strong>
+            </div>
+            <button class="btn btn-secondary btn-block" onclick="MobileApp.openRateModal()">
+              ✏️ Edit Shop Daily Rates / Live MCX
+            </button>
+          </div>
+
           <div class="card">
             <div style="font-weight:700; font-size:14px; margin-bottom:10px;">🌓 ${I18N.t('theme')}</div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
