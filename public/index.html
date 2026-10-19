@@ -174,6 +174,7 @@
       pairingCode: 'JWELL-EDIT-8899',
       accountEmail: '',
       driveFolder: '/JwellersEdith_Sync/',
+      driveShareUrl: '',    // Google Drive direct-download URL for auto-sync
       shopUpiId: '',
       lastSyncedAt: null,
       currentScreen: 'dashboard',
@@ -186,104 +187,9 @@
         isCustom: false,
         lastUpdated: 'Live Market'
       },
-      khataList: [
-        {
-          id: 1, name: 'Ramesh Patel', phone: '9822112233', city: 'Indapur', dues: 18500,
-          totalPurchases: 145000, totalJama: 126500,
-          bills: [
-            { invoiceNo: 'INV-2026-084', date: '2026-08-10', items: 'Gold Chain 22K (18.5g)', amount: 125000, payment: 'Partial' },
-            { invoiceNo: 'INV-2026-092', date: '2026-08-18', items: 'Silver Coin (50g)', amount: 20000, payment: 'Credit' }
-          ],
-          jamaHistory: [
-            { date: '2026-08-10', amount: 80000, mode: 'Cash', note: 'Advance at purchase' },
-            { date: '2026-08-20', amount: 30000, mode: 'UPI (GPay)', note: 'Bank transfer' },
-            { date: '2026-08-26', amount: 16500, mode: 'Cash', note: 'Last counter payment' }
-          ]
-        },
-        {
-          id: 2, name: 'Sunita Sharma', phone: '9833445566', city: 'Baramati', dues: 24000,
-          totalPurchases: 85000, totalJama: 61000,
-          bills: [
-            { invoiceNo: 'INV-2026-061', date: '2026-07-25', items: 'Gold Ring 22K (4.2g) + Silver Payal', amount: 85000, payment: 'Partial' }
-          ],
-          jamaHistory: [
-            { date: '2026-07-25', amount: 50000, mode: 'Cash', note: 'On booking' },
-            { date: '2026-08-12', amount: 11000, mode: 'UPI (PhonePe)', note: 'Partial clearing' }
-          ]
-        },
-        {
-          id: 3, name: 'Anand Kumar', phone: '9844556677', city: 'Pune', dues: 9200,
-          totalPurchases: 54000, totalJama: 44800,
-          bills: [
-            { invoiceNo: 'INV-2026-072', date: '2026-08-05', items: 'Gold Nose Pin & Silver Utensils', amount: 54000, payment: 'Partial' }
-          ],
-          jamaHistory: [
-            { date: '2026-08-05', amount: 35000, mode: 'Cash', note: 'Initial payment' },
-            { date: '2026-08-22', amount: 9800, mode: 'Cash', note: 'Second installment' }
-          ]
-        },
-        {
-          id: 4, name: 'Vijay Deshmukh', phone: '9855667788', city: 'Phaltan', dues: 45000,
-          totalPurchases: 220000, totalJama: 175000,
-          bills: [
-            { invoiceNo: 'INV-2026-045', date: '2026-06-15', items: 'Bridal Gold Necklace Set 22K (32g)', amount: 220000, payment: 'Credit' }
-          ],
-          jamaHistory: [
-            { date: '2026-06-15', amount: 100000, mode: 'RTGS / Bank', note: 'Advance' },
-            { date: '2026-07-10', amount: 50000, mode: 'Cash', note: 'Post wedding payment' },
-            { date: '2026-08-14', amount: 25000, mode: 'UPI (Paytm)', note: 'Installment' }
-          ]
-        },
-        {
-          id: 5, name: 'Sanjay Sonawane', phone: '9866778899', city: 'Daund', dues: 12800,
-          totalPurchases: 42000, totalJama: 29200,
-          bills: [
-            { invoiceNo: 'INV-2026-098', date: '2026-08-15', items: 'Silver Pooja Thali Set', amount: 42000, payment: 'Partial' }
-          ],
-          jamaHistory: [
-            { date: '2026-08-15', amount: 20000, mode: 'Cash', note: 'Advance' },
-            { date: '2026-08-25', amount: 9200, mode: 'UPI', note: 'Counter clearing' }
-          ]
-        }
-      ],
-      girviList: [
-        {
-          id: 1, loan_number: 'GIR-1001', customer_name: 'Ramesh Patel', father_husband_name: 'Dattatray',
-          phone1: '9822112233', address: 'Indapur, Pune', item_name: 'Gold Chain 22K', metal_type: 'gold',
-          gold_weight: 18.5, silver_weight: 0, principal_amount: 55000, monthly_interest_percent: 2.0,
-          loan_date: '2026-06-10', reference_person: 'Suresh Sheth', notes: 'Pledged in original box',
-          accruedDays: 80, accruedInterest: 2933, totalDues: 57933,
-          payments: [
-            { date: '2026-07-10', amount: 1100, type: 'interest_payment', mode: 'Cash', note: '1 month interest' }
-          ]
-        },
-        {
-          id: 2, loan_number: 'GIR-1002', customer_name: 'Sunita Sharma', father_husband_name: 'Jagdish',
-          phone1: '9833445566', address: 'Baramati, Pune', item_name: 'Silver Payal 92.5%', metal_type: 'silver',
-          gold_weight: 0, silver_weight: 250, principal_amount: 14000, monthly_interest_percent: 2.5,
-          loan_date: '2026-07-01', reference_person: 'Govind Jewellers', notes: 'Pair of anklets with bells',
-          accruedDays: 59, accruedInterest: 688, totalDues: 14688,
-          payments: []
-        },
-        {
-          id: 3, loan_number: 'GIR-1003', customer_name: 'Vijay Deshmukh', father_husband_name: 'Baburao',
-          phone1: '9855667788', address: 'Phaltan, Satara', item_name: 'Gold Bangles (2)', metal_type: 'gold',
-          gold_weight: 32.0, silver_weight: 0, principal_amount: 95000, monthly_interest_percent: 1.5,
-          loan_date: '2026-05-15', reference_person: 'Maheshbhai', notes: 'Hallmarked 916 KDM',
-          accruedDays: 106, accruedInterest: 5035, totalDues: 100035,
-          payments: [
-            { date: '2026-06-15', amount: 1425, type: 'interest_payment', mode: 'UPI', note: 'May-June interest' },
-            { date: '2026-07-15', amount: 1425, type: 'interest_payment', mode: 'Cash', note: 'June-July interest' }
-          ]
-        }
-      ],
-      customers: [
-        { id: 1, name: 'Ramesh Patel', phone: '9822112233', city: 'Indapur', balance: 18500 },
-        { id: 2, name: 'Sunita Sharma', phone: '9833445566', city: 'Baramati', balance: 24000 },
-        { id: 3, name: 'Anand Kumar', phone: '9844556677', city: 'Pune', balance: 9200 },
-        { id: 4, name: 'Vijay Deshmukh', phone: '9855667788', city: 'Phaltan', balance: 45000 },
-        { id: 5, name: 'Sanjay Sonawane', phone: '9866778899', city: 'Daund', balance: 12800 }
-      ]
+      khataList: [],
+      girviList: [],
+      customers: []
     };
 
     // --- Bilingual Dictionary ---
@@ -324,11 +230,105 @@
       init() {
         try {
           const saved = localStorage.getItem('je_mobile_state');
-          if (saved) Object.assign(State, JSON.parse(saved));
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            Object.assign(State, parsed);
+          }
         } catch(e) {}
+
+        // Purge any stale mock records from localStorage
+        const hasMockKhata = Array.isArray(State.khataList) && State.khataList.some(k => k.name === 'Ramesh Patel' && k.phone === '9822112233');
+        const hasMockGirvi = Array.isArray(State.girviList) && State.girviList.some(g => g.loan_number === 'GIR-1001');
+        if (hasMockKhata || hasMockGirvi) {
+          State.khataList = [];
+          State.girviList = [];
+          State.customers = [];
+          this.saveState();
+        }
+
         this.applyTheme(State.theme || 'light');
         this.fetchLiveMarketRates();
         this.render();
+
+        // Background Auto-Sync whenever app opens or gains focus
+        window.addEventListener('focus', () => this.autoBackgroundSync());
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') this.autoBackgroundSync();
+        });
+
+        // Periodic background pulse every 3 minutes
+        setInterval(() => this.autoBackgroundSync(), 180000);
+      },
+
+      cleanDriveUrl(url) {
+        if (!url) return '';
+        url = url.trim();
+        // Convert Google Drive sharing link: https://drive.google.com/file/d/FILE_ID/view... -> direct download
+        const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) {
+          return `https://drive.google.com/uc?export=download&id=${match[1]}`;
+        }
+        const idMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        if (idMatch && idMatch[1] && !url.includes('export=download')) {
+          return `https://drive.google.com/uc?export=download&id=${idMatch[1]}`;
+        }
+        return url;
+      },
+
+      async autoBackgroundSync(manualTrigger = false) {
+        let rawUrl = State.driveShareUrl || '';
+        if (!rawUrl) {
+          if (manualTrigger) {
+            alert('⚠️ No Google Drive URL configured yet.\nPlease paste your Google Drive link or select your ledger_snapshot.json file.');
+            this.navigate('settings');
+          }
+          return false;
+        }
+        const url = this.cleanDriveUrl(rawUrl);
+        try {
+          const resp = await fetch(url, { cache: 'no-store' });
+          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+          const snapshot = await resp.json();
+          if (snapshot && (snapshot.girviList || snapshot.khataList || snapshot.customers)) {
+            let countGirvi = 0;
+            let countKhata = 0;
+            let countCust = 0;
+
+            if (Array.isArray(snapshot.girviList)) {
+              State.girviList = snapshot.girviList.sort((a, b) => (b.id || 0) - (a.id || 0));
+              countGirvi = State.girviList.length;
+            }
+            if (Array.isArray(snapshot.khataList)) {
+              State.khataList = snapshot.khataList;
+              countKhata = State.khataList.length;
+            }
+            if (Array.isArray(snapshot.customers)) {
+              State.customers = snapshot.customers;
+              countCust = State.customers.length;
+            }
+            if (snapshot.rates) State.rates = { ...State.rates, ...snapshot.rates };
+            State.lastSyncedAt = snapshot.exportedAt || new Date().toISOString();
+            State.isPaired = true;
+            this.saveState();
+            this.render();
+            if (manualTrigger) {
+              alert(`🎉 Synced Successfully!\n\n• ${countCust} Customers\n• ${countGirvi} Girvi Loans\n• ${countKhata} Khata Accounts`);
+            }
+            return true;
+          }
+        } catch (e) {
+          if (manualTrigger) {
+            alert(`⚠️ Could not download snapshot from Drive link (${e.message}).\n\nTip: You can also select the "ledger_snapshot.json" file directly.`);
+            const fileInput = document.getElementById('snapshot-file-input') || document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = '.json';
+            fileInput.style.display = 'none';
+            fileInput.onchange = (ev) => this.importSnapshotFromFile(ev);
+            document.body.appendChild(fileInput);
+            fileInput.click();
+          }
+        }
+        return false;
       },
 
       // --- Live Real-Time Bullion Rates Engine ---
@@ -430,11 +430,15 @@
             isPaired: State.isPaired,
             accountEmail: State.accountEmail,
             pairingCode: State.pairingCode,
+            driveShareUrl: State.driveShareUrl,
             shopUpiId: State.shopUpiId,
             lastSyncedAt: State.lastSyncedAt,
             lang: State.lang,
             theme: State.theme,
-            rates: State.rates
+            rates: State.rates,
+            khataList: State.khataList,
+            girviList: State.girviList,
+            customers: State.customers
           }));
         } catch(e) {}
       },
@@ -692,6 +696,24 @@
                 </div>
               `).join('') : '<div style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">No payments recorded</div>'}
 
+              ${c.transactions && c.transactions.length > 0 ? `
+              <div style="font-weight:800; font-size:13px; text-transform:uppercase; color:var(--text-muted); margin-top:14px; margin-bottom:8px;">
+                📜 Passbook Ledger Entries (${c.transactions.length})
+              </div>
+              ${c.transactions.map(t => `
+                <div style="background:var(--bg-card); padding:8px 12px; border-radius:8px; border:1px solid var(--border); margin-bottom:6px; font-size:12px;">
+                  <div style="display:flex; justify-content:space-between; font-weight:700;">
+                    <span>${t.narration || t.type || 'Entry'}</span>
+                    <span style="color:${(t.debit > 0) ? 'var(--danger)' : 'var(--success)'};">${(t.debit > 0) ? '- ₹' + Number(t.debit).toLocaleString('en-IN') : '+ ₹' + Number(t.credit || t.amount || 0).toLocaleString('en-IN')}</span>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; color:var(--text-muted); font-size:11px; margin-top:2px;">
+                    <span>📅 ${t.date || ''}</span>
+                    <span>Bal: <strong>₹${Number(t.balance || 0).toLocaleString('en-IN')}</strong></span>
+                  </div>
+                </div>
+              `).join('')}
+              ` : ''}
+
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:16px;">
                 <button class="btn btn-whatsapp" onclick="MobileApp.sendWhatsApp('${c.phone}', '${c.name}', ${c.dues})">
                   📲 Send Statement
@@ -726,7 +748,7 @@
 
       _generateGirviHtml(query) {
         const q = (query || '').toLowerCase().trim();
-        const filtered = State.girviList.filter(g => !q || g.loan_number.toLowerCase().includes(q) || g.customer_name.toLowerCase().includes(q) || g.phone1.includes(q) || g.address.toLowerCase().includes(q));
+        const filtered = State.girviList.filter(g => !q || g.loan_number.toLowerCase().includes(q) || g.customer_name.toLowerCase().includes(q) || (g.caste && g.caste.toLowerCase().includes(q)) || g.phone1.includes(q) || g.address.toLowerCase().includes(q));
 
         if (filtered.length === 0) {
           return `<div class="card" style="text-align:center; padding:30px; color:var(--text-muted);">No matching Girvi pledges found</div>`;
@@ -734,18 +756,39 @@
 
         return filtered.map(g => {
           const wt = g.metal_type === 'gold' ? `${g.gold_weight}g Gold` : g.metal_type === 'silver' ? `${g.silver_weight}g Silver` : `${g.gold_weight}g Au / ${g.silver_weight}g Ag`;
+          const days = g.accruedDays || 60;
+          const m = Math.floor(days / 30);
+          const d = days % 30;
+
+          // Calculate SI and CI for display from snapshot data
+          const principal = g.principal_amount || 0;
+          const rate = g.monthly_interest_percent || 2.0;
+          const snDays = g.accruedDays || (g.billableMonths || 0) * 30 || 60;
+          const mElapsed = Math.floor(snDays / 30);
+          const dRem = snDays % 30;
+          let bMonths = mElapsed + (dRem >= 15 ? 1 : 0);
+          if (bMonths < 1) bMonths = 1;
+          const siDisplay = g.simpleInterest !== undefined ? g.simpleInterest : Math.round((principal * rate * bMonths) / 100 * 100) / 100;
+          const ciDisplay = g.compoundInterest !== undefined ? g.compoundInterest : siDisplay;
+          const iType = g.interest_type || 'simple';
+          const chargedDisplay = iType === 'compound' ? ciDisplay : siDisplay;
+
           return `
             <div class="card" style="border-left: 4px solid var(--primary);">
               <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <div>
                   <div style="font-size:12px; font-weight:800; color:var(--primary);">${g.loan_number}</div>
                   <div style="font-weight:700; font-size:15px; margin-top:2px;">${g.customer_name}</div>
+                  ${g.caste ? `<div style="font-size:11px; font-weight:700; color:var(--primary); margin-top:1px;">🏷️ Caste (जाति): ${g.caste}</div>` : ''}
                   <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">📍 ${g.address} • 📞 ${g.phone1}</div>
                 </div>
                 <div style="text-align:right;">
-                  <div style="font-size:11px; font-weight:700; color:var(--text-muted);">PRINCIPAL</div>
-                  <div style="font-size:17px; font-weight:800; color:var(--primary); margin-top:2px;">₹${g.principal_amount.toLocaleString('en-IN')}</div>
-                  <div style="font-size:11px; color:var(--text-muted);">${g.monthly_interest_percent}% /mo</div>
+                  <div style="font-size:11px; font-weight:700; color:var(--text-muted);">PRINCIPAL (मूलधन)</div>
+                  <div style="font-size:17px; font-weight:800; color:var(--primary); margin-top:2px;">₹${principal.toLocaleString('en-IN')}</div>
+                  <div style="font-size:11px; color:var(--text-muted);">${rate}% /mo</div>
+                  <div style="font-size:10px; color:${iType === 'compound' ? '#e67e22' : 'var(--success)'}; font-weight:700; margin-top:2px;">
+                    ${iType === 'compound' ? '⚡ Compound' : '✅ Simple'}
+                  </div>
                 </div>
               </div>
 
@@ -754,9 +797,13 @@
                 <span>⚖️ <strong>${wt}</strong></span>
               </div>
 
-              <div style="display:flex; justify-content:space-between; font-size:12px; margin-top:8px; color:var(--text-muted);">
-                <span>⏳ Elapsed: <strong>${g.accruedDays || 60} days</strong></span>
-                <span>Interest Dues: <strong style="color:var(--danger);">₹${(g.accruedInterest || 0).toLocaleString('en-IN')}</strong></span>
+              <!-- Dual Interest Display -->
+              <div style="background:var(--bg-app); padding:8px 12px; border-radius:8px; margin-top:6px; font-size:12px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+                  <span style="color:var(--success);">✅ साधारण ब्याज (SI): <strong>₹${siDisplay.toLocaleString('en-IN')}</strong></span>
+                  <span style="color:#e67e22;">⚡ चक्रवर्ती (CI): <strong>₹${ciDisplay.toLocaleString('en-IN')}</strong></span>
+                </div>
+                <div style="font-size:11px; color:var(--text-muted);">⏳ ${m}m ${d}d &nbsp;|&nbsp; Charged (लागू): <strong style="color:var(--danger);">₹${chargedDisplay.toLocaleString('en-IN')}</strong></div>
               </div>
 
               ${g.reference_person ? `<div style="font-size:12px; color:var(--text-muted); margin-top:4px;">🤝 Reference: <strong>${g.reference_person}</strong></div>` : ''}
@@ -780,9 +827,20 @@
         }).join('');
       },
 
+
       viewGirvi(loanNo) {
         const g = State.girviList.find(x => x.loan_number === loanNo);
         if (!g) return;
+
+        const days = g.accruedDays || 60;
+        const m = Math.floor(days / 30);
+        const d = days % 30;
+        const billableMonths = m + (d >= 15 ? 1 : 0);
+
+        const siModal = g.simpleInterest !== undefined ? g.simpleInterest : Math.round((g.principal_amount * g.monthly_interest_percent * billableMonths) / 100 * 100) / 100;
+        const ciModal = g.compoundInterest !== undefined ? g.compoundInterest : siModal;
+        const iTypeModal = g.interest_type || 'simple';
+        const chargedModal = iTypeModal === 'compound' ? ciModal : siModal;
 
         const modalHtml = `
           <div class="modal-backdrop" id="girvi-modal" onclick="document.getElementById('girvi-modal').remove()">
@@ -792,23 +850,41 @@
                 <button class="btn btn-sm btn-secondary" onclick="document.getElementById('girvi-modal').remove()">✕</button>
               </div>
               <div style="padding:10px 0; font-size:14px; line-height:1.7;">
-                <div><strong>Customer:</strong> ${g.customer_name}</div>
-                ${g.father_husband_name ? `<div><strong>Relation:</strong> S/o ${g.father_husband_name}</div>` : ''}
-                <div><strong>Mobile:</strong> ${g.phone1}</div>
-                <div><strong>Village/Address:</strong> ${g.address}</div>
+                <div><strong>Customer (ग्राहक):</strong> ${g.customer_name}</div>
+                ${g.father_husband_name ? `<div><strong>S/o or W/o (पिता/पति):</strong> ${g.father_husband_name}</div>` : ''}
+                ${g.caste ? `<div><strong>Caste (जाति):</strong> <span style="color:var(--primary); font-weight:700;">${g.caste}</span></div>` : ''}
+                <div><strong>Mobile (मोबाइल):</strong> ${g.phone1}</div>
+                <div><strong>Address (पता):</strong> ${g.address}</div>
                 <hr style="margin:10px 0; border:0; border-top:1px solid var(--border);" />
-                <div><strong>Ornament Description:</strong> ${g.item_name}</div>
-                <div><strong>Metal Type:</strong> ${g.metal_type.toUpperCase()}</div>
-                <div><strong>Gold Weight:</strong> ${g.gold_weight} gms</div>
-                <div><strong>Silver Weight:</strong> ${g.silver_weight} gms</div>
-                <div><strong>Principal Loan (Rakam):</strong> ₹${g.principal_amount.toLocaleString('en-IN')}</div>
-                <div><strong>Monthly Interest Rate:</strong> ${g.monthly_interest_percent}% /mo</div>
-                <div><strong>Pledge Date:</strong> ${g.loan_date}</div>
-                <div><strong>Accrued Days:</strong> ${g.accruedDays || 60} days</div>
-                <div><strong>Accrued Interest:</strong> <span style="color:var(--danger); font-weight:700;">₹${(g.accruedInterest || 0).toLocaleString('en-IN')}</span></div>
-                <div><strong>Total Outstanding Balance:</strong> <span style="color:var(--primary); font-weight:800;">₹${(g.totalDues || g.principal_amount).toLocaleString('en-IN')}</span></div>
-                ${g.reference_person ? `<div><strong>Reference Person:</strong> ${g.reference_person}</div>` : ''}
-                ${g.notes ? `<div><strong>Remarks / Notes:</strong> ${g.notes}</div>` : ''}
+                <div><strong>Ornament (गहना):</strong> ${g.item_name}</div>
+                <div><strong>Metal (धातु):</strong> ${g.metal_type.toUpperCase()}</div>
+                <div><strong>Gold Weight (सोना):</strong> ${g.gold_weight} gms</div>
+                <div><strong>Silver Weight (चांदी):</strong> ${g.silver_weight} gms</div>
+                <div><strong>Principal (मूलधन):</strong> ₹${g.principal_amount.toLocaleString('en-IN')}</div>
+                <div><strong>Interest Rate (ब्याज दर):</strong> ${g.monthly_interest_percent}% /month</div>
+                <div><strong>Interest Type:</strong> <span style="color:${iTypeModal === 'compound' ? '#e67e22' : 'var(--success)'}; font-weight:700;">${iTypeModal === 'compound' ? '⚡ Compound (चक्रवर्ती)' : '✅ Simple (साधारण)'}</span></div>
+                <div><strong>Pledge Date (दिनांक):</strong> ${g.loan_date}</div>
+                <div><strong>Duration (अवधि):</strong> <strong>${m}m ${d}d</strong></div>
+                <hr style="margin:10px 0; border:0; border-top:1px solid var(--border);" />
+                <!-- Interest Comparison -->
+                <div style="background:var(--bg-app); padding:10px 12px; border-radius:8px; margin-bottom:6px;">
+                  <div style="font-weight:700; font-size:12px; margin-bottom:6px; color:var(--text-muted);">INTEREST BREAKDOWN (ब्याज विवरण)</div>
+                  <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                    <span>✅ साधारण ब्याज (SI):</span>
+                    <strong style="color:var(--success);">₹${siModal.toLocaleString('en-IN')}</strong>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                    <span>⚡ चक्रवर्ती ब्याज (CI):</span>
+                    <strong style="color:#e67e22;">₹${ciModal.toLocaleString('en-IN')}</strong>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; font-size:13px; border-top:1px dashed var(--border); padding-top:6px; margin-top:4px;">
+                    <span><strong>Charged (लागू ब्याज):</strong></span>
+                    <strong style="color:var(--danger); font-size:15px;">₹${chargedModal.toLocaleString('en-IN')}</strong>
+                  </div>
+                </div>
+                <div><strong>Total Outstanding (कुल बकाया):</strong> <span style="color:var(--primary); font-weight:800; font-size:16px;">₹${(g.totalDues || g.principal_amount).toLocaleString('en-IN')}</span></div>
+                ${g.reference_person ? `<div><strong>Reference (संदर्भ):</strong> ${g.reference_person}</div>` : ''}
+                ${g.notes ? `<div><strong>Remarks (टिप्पणी):</strong> ${g.notes}</div>` : ''}
               </div>
 
               ${g.payments && g.payments.length > 0 ? `
@@ -1012,6 +1088,26 @@
             </button>
           </div>
 
+          <div class="card" style="border:1px solid var(--primary);">
+            <div style="font-weight:700; font-size:14px; margin-bottom:6px;">☁️ Auto-Sync URL (Google Drive)</div>
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px; line-height:1.5;">
+              Paste the Google Drive <strong>direct-download link</strong> for <code>ledger_snapshot.json</code>.<br>
+              App will auto-fetch data every time it opens.
+            </div>
+            <input type="url" id="drive-url-field" class="search-input" style="padding-left:14px; font-size:12px;"
+              placeholder="https://drive.google.com/uc?id=...&export=download"
+              value="${State.driveShareUrl || ''}">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px;">
+              <button class="btn btn-secondary" onclick="
+                State.driveShareUrl = document.getElementById('drive-url-field').value.trim();
+                MobileApp.saveState();
+                alert('✅ Sync URL Saved! App will auto-sync on next open.');
+              ">💾 Save URL</button>
+              <button class="btn btn-primary" onclick="MobileApp.autoBackgroundSync().then(() => MobileApp.render());">🔄 Sync Now</button>
+            </div>
+            ${State.lastSyncedAt ? `<div style="font-size:11px; color:var(--text-muted); margin-top:8px;">Last synced: <strong>${new Date(State.lastSyncedAt).toLocaleString('en-IN', {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}</strong></div>` : ''}
+          </div>
+
           <div style="text-align:center; padding:16px; font-size:12px; color:var(--text-muted); line-height:1.6;">
             <div style="font-weight:700; color:var(--primary);">Jwellers Edith — Mobile Companion</div>
             <div>Version 1.3.0 • An <strong>AD's Creation</strong> Product</div>
@@ -1019,52 +1115,40 @@
         `;
       },
 
+
       _renderOnboardingWizard() {
-        let stepHtml = '';
-        if (this._wizardStep === 1) {
-          stepHtml = `
-            <div class="wizard-step">
-              <div class="wizard-icon">
-                <img src="icon.png" alt="Logo" />
-              </div>
-              <span class="step-pill">DESKTOP PAIRING</span>
-              <h2 class="wizard-title">Pair with Desktop PC</h2>
-              <p class="wizard-desc">Open <strong>Desktop Software > Settings > Mobile Companion QR</strong> and enter the pairing code and your real Google Account.</p>
-              
-              <div style="text-align:left; margin:16px 0;">
-                <label style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Desktop Pairing Code</label>
-                <input type="text" id="wiz-code" class="search-input" style="padding-left:14px; font-weight:800; font-size:16px; letter-spacing:1px; margin-top:6px;" placeholder="e.g. JWELL-EDIT-8899" value="JWELL-EDIT-8899">
-
-                <label style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-top:14px; display:block;">Your Real Shop Gmail Account</label>
-                <input type="email" id="wiz-email" class="search-input" style="padding-left:14px; margin-top:6px;" placeholder="Enter your real email (e.g. yourshop@gmail.com)" value="${State.accountEmail || ''}">
-                <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">* Must be the same Gmail connected in your Desktop PC settings</div>
-              </div>
-
-              <button class="btn btn-primary btn-block" style="padding:14px; font-size:15px;" onclick="MobileApp.startSyncProcess()">
-                🚀 Connect & Sync with Desktop
-              </button>
+        let stepHtml = `
+          <div class="wizard-step">
+            <div class="wizard-icon">
+              <img src="icon.png" alt="Logo" />
             </div>
-          `;
-        } else if (this._wizardStep === 2) {
-          stepHtml = `
-            <div class="wizard-step">
-              <div class="wizard-icon">
-                <img src="icon.png" alt="Logo" />
-              </div>
-              <span class="step-pill" style="background:#c6f6d5; color:#22543d;">CONNECTING</span>
-              <h2 class="wizard-title" id="sync-title">Connecting to Google Drive...</h2>
-              <p class="wizard-desc" id="sync-desc">Establishing secure handshake with /JwellersEdith_Sync/ on your personal Drive storage.</p>
-              
-              <div class="progress-track">
-                <div class="progress-bar" id="wiz-bar"></div>
-              </div>
+            <span class="step-pill">GOOGLE DRIVE CLOUD SYNC</span>
+            <h2 class="wizard-title">Pair with Desktop PC</h2>
+            <p class="wizard-desc">Connect with your desktop shop data via <strong>Google Drive link</strong> or by selecting <strong>ledger_snapshot.json</strong>.</p>
+            
+            <div style="text-align:left; margin:16px 0;">
+              <label style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Desktop Pairing Code</label>
+              <input type="text" id="wiz-code" class="search-input" style="padding-left:14px; font-weight:800; font-size:15px; letter-spacing:1px; margin-top:4px;" placeholder="e.g. JWELL-EDIT-8899" value="${State.pairingCode || 'JWELL-EDIT-8899'}">
 
-              <div id="sync-log" style="text-align:left; background:var(--bg-card); padding:12px; border-radius:10px; font-size:12px; font-family:monospace; line-height:1.6; border:1px solid var(--border); max-height:140px; overflow-y:auto;">
-                <div>⏳ Handshaking with ${State.pairingCode || 'JWELL-EDIT-8899'}...</div>
-              </div>
+              <label style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-top:12px; display:block;">Your Real Shop Gmail</label>
+              <input type="email" id="wiz-email" class="search-input" style="padding-left:14px; margin-top:4px;" placeholder="e.g. yourshop@gmail.com" value="${State.accountEmail || ''}">
+
+              <label style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-top:12px; display:block;">Google Drive Share Link (Optional)</label>
+              <input type="url" id="wiz-drive-url" class="search-input" style="padding-left:14px; font-size:12px; margin-top:4px;" placeholder="https://drive.google.com/file/d/.../view" value="${State.driveShareUrl || ''}">
+              <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">* Link to ledger_snapshot.json from your Google Drive folder</div>
             </div>
-          `;
-        }
+
+            <input type="file" id="snapshot-file-input" accept=".json" style="display:none;" onchange="MobileApp.importSnapshotFromFile(event)">
+
+            <button class="btn btn-primary btn-block" style="padding:14px; font-size:15px; font-weight:700; margin-bottom:10px;" onclick="MobileApp.startDriveSyncWithPermission()">
+              🚀 Connect & Sync Data
+            </button>
+
+            <button class="btn btn-secondary btn-block" style="padding:12px; font-size:13px; font-weight:600;" onclick="document.getElementById('snapshot-file-input').click()">
+              📁 Select ledger_snapshot.json File
+            </button>
+          </div>
+        `;
 
         return `
           <div class="app-content" style="display:flex; align-items:center; justify-content:center; min-height:100vh;">
@@ -1075,9 +1159,10 @@
         `;
       },
 
-      startSyncProcess() {
+      async startDriveSyncWithPermission() {
         const codeInput = document.getElementById('wiz-code')?.value.trim() || 'JWELL-EDIT-8899';
         const emailInput = document.getElementById('wiz-email')?.value.trim();
+        const driveUrlInput = document.getElementById('wiz-drive-url')?.value.trim();
 
         if (!emailInput || !emailInput.includes('@')) {
           alert('⚠️ Please enter your real Gmail address (e.g. yourshop@gmail.com) so the app can connect to your Google Drive!');
@@ -1086,36 +1171,24 @@
 
         State.pairingCode = codeInput;
         State.accountEmail = emailInput;
-        this._wizardStep = 2;
-        this.render();
+        if (driveUrlInput) {
+          State.driveShareUrl = driveUrlInput;
+        }
+        this.saveState();
 
-        const bar = document.getElementById('wiz-bar');
-        const log = document.getElementById('sync-log');
-        const title = document.getElementById('sync-title');
-        const desc = document.getElementById('sync-desc');
+        if (State.driveShareUrl) {
+          const synced = await this.autoBackgroundSync(true);
+          if (synced) {
+            this.navigate('dashboard');
+            return;
+          }
+        }
 
-        setTimeout(() => {
-          if (bar) bar.style.width = '35%';
-          if (log) log.innerHTML += '<div>✅ Google Drive Authenticated: ' + State.accountEmail + '</div>';
-        }, 600);
-
-        setTimeout(() => {
-          if (bar) bar.style.width = '75%';
-          if (log) log.innerHTML += '<div>📥 Downloading Khata passbooks & bills...</div><div>📥 Downloading Girvi pledge tickets...</div>';
-        }, 1300);
-
-        setTimeout(() => {
-          if (bar) bar.style.width = '100%';
-          if (title) title.textContent = '🎉 All Synced & Ready!';
-          if (desc) desc.textContent = 'Your mobile device is now paired with ' + State.accountEmail + ' and 100% offline-ready.';
-          if (log) log.innerHTML += '<div style="color:var(--success); font-weight:700;">✅ Handshake Complete! Passbook & Girvi ready.</div>';
-          State.isPaired = true;
-          State.lastSyncedAt = new Date().toLocaleTimeString();
-          MobileApp.saveState();
-          setTimeout(() => {
-            MobileApp.navigate('dashboard');
-          }, 900);
-        }, 2100);
+        // If no URL or direct fetch failed, offer file selection
+        const fileInput = document.getElementById('snapshot-file-input');
+        if (fileInput) {
+          fileInput.click();
+        }
       },
 
       resetOnboarding() {
@@ -1123,6 +1196,57 @@
         this._wizardStep = 1;
         this.saveState();
         this.render();
+      },
+
+      importSnapshotFromFile(e) {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const data = JSON.parse(event.target.result);
+            let countCust = 0;
+            let countGirvi = 0;
+            let countKhata = 0;
+
+            if (Array.isArray(data.customers)) {
+              State.customers = data.customers;
+              countCust = data.customers.length;
+            }
+            if (Array.isArray(data.girviList)) {
+              State.girviList = data.girviList;
+              countGirvi = data.girviList.length;
+            }
+            if (Array.isArray(data.khataList)) {
+              State.khataList = data.khataList;
+              countKhata = data.khataList.length;
+            } else if (Array.isArray(data.customers)) {
+              State.khataList = data.customers.map(c => ({
+                id: c.id,
+                name: c.name,
+                phone: c.phone || '',
+                city: c.city || '',
+                dues: c.balance || 0,
+                totalPurchases: c.balance || 0,
+                totalJama: 0,
+                bills: [],
+                jamaHistory: []
+              }));
+              countKhata = State.khataList.length;
+            }
+            if (data.rates) {
+              State.rates = { ...State.rates, ...data.rates };
+            }
+            State.isPaired = true;
+            State.lastSyncedAt = new Date().toLocaleTimeString();
+            this.saveState();
+            alert(`🎉 Data Transferred Successfully!\n\n• Loaded ${countCust} Customers\n• Loaded ${countGirvi} Girvi Loans\n• Loaded ${countKhata} Khata Accounts & Balances\n\nYour mobile companion is now 100% up-to-date with your shop!`);
+            this.navigate('dashboard');
+          } catch (err) {
+            alert(`⚠️ Could not parse data file: ${err.message}`);
+          }
+        };
+        reader.readAsText(file);
       },
 
       showSyncSheet() {
@@ -1140,7 +1264,7 @@
                 <div>Last Synchronized: <strong>${State.lastSyncedAt || 'Just Now'}</strong></div>
               </div>
               <button class="btn btn-primary btn-block" style="padding:14px;" onclick="MobileApp.triggerInstantSync()">
-                🔄 Fetch Latest Updates from PC
+                🔄 Fetch Latest Updates from Google Drive
               </button>
               <button class="btn btn-secondary btn-block" style="margin-top:10px;" onclick="document.getElementById('sync-sheet').remove()">
                 Close
@@ -1151,13 +1275,21 @@
         document.getElementById('modal-host').innerHTML = modalHtml;
       },
 
-      triggerInstantSync() {
+      async triggerInstantSync() {
         const sheet = document.getElementById('sync-sheet');
         if (sheet) sheet.remove();
-        alert('🔄 Delta sync completed! Local Khata & Girvi caches are 100% up-to-date with ' + State.accountEmail);
-        State.lastSyncedAt = new Date().toLocaleTimeString();
-        this.saveState();
-        this.render();
+
+        if (State.driveShareUrl) {
+          await this.autoBackgroundSync(true);
+        } else {
+          const fileInput = document.getElementById('snapshot-file-input') || document.createElement('input');
+          fileInput.type = 'file';
+          fileInput.accept = '.json';
+          fileInput.style.display = 'none';
+          fileInput.onchange = (e) => this.importSnapshotFromFile(e);
+          document.body.appendChild(fileInput);
+          fileInput.click();
+        }
       },
 
       sendWhatsApp(phone, name, dues) {
