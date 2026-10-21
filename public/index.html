@@ -175,6 +175,8 @@
       accountEmail: '',
       driveFolder: '/JwellersEdith_Sync/',
       driveShareUrl: '',    // Google Drive direct-download URL for auto-sync
+      shopName: '',         // Shop Name synced from PC
+      shopPhone: '',
       shopUpiId: '',
       lastSyncedAt: null,
       currentScreen: 'dashboard',
@@ -305,6 +307,11 @@
             if (Array.isArray(snapshot.customers)) {
               State.customers = snapshot.customers;
               countCust = State.customers.length;
+            }
+            if (snapshot.shop) {
+              if (snapshot.shop.shop_name) State.shopName = snapshot.shop.shop_name;
+              if (snapshot.shop.phone) State.shopPhone = snapshot.shop.phone;
+              if (snapshot.shop.upi_id) State.shopUpiId = snapshot.shop.upi_id;
             }
             if (snapshot.rates) State.rates = { ...State.rates, ...snapshot.rates };
             State.lastSyncedAt = snapshot.exportedAt || new Date().toISOString();
@@ -991,7 +998,14 @@
       },
 
       sendGirviWhatsApp(phone, name, loanNo, dues) {
-        let msg = `Namaste *${name} ji* 🙏\n\nThis is a statement regarding your Girvi Pledge ticket *#${loanNo}* at *Jwellers Edith*.\n\n• *Total Outstanding Balance:* ₹${Number(dues).toLocaleString('en-IN')}\n\nKindly contact or visit the shop for interest clearance or redemption.\n\nThank you!\n- *Jwellers Edith*`;
+        const sName = (State.shopName && State.shopName.trim()) ? State.shopName.trim() : 'Jewellers';
+        const contact = State.shopPhone || '';
+        const contactLine = contact ? `\n📞 *संपर्क / Contact:* ${contact}` : '';
+        const upi = State.shopUpiId ? `\n💳 *UPI भुगतान / Payment ID:* \`${State.shopUpiId}\`` : '';
+        const amtStr = Number(dues || 0).toLocaleString('en-IN');
+
+        let msg = `नमस्ते *${name} जी* 🙏\nNamaste *${name} ji* 🙏\n\nयह *${sName}* में आपकी गिरवी रसीद *#${loanNo}* के संबंध में सूचना है।\nThis is a statement regarding your Girvi Pledge ticket *#${loanNo}* at *${sName}*.\n\n💰 *कुल देय राशि / Total Outstanding:* *₹${amtStr}*${upi}\n\nब्याज जमा करने अथवा गिरवी छुड़ाने हेतु कृपया दुकान पर पधारें या संपर्क करें।\nKindly visit or contact the shop for interest clearance or redemption.${contactLine}\n\nधन्यवाद / Thank you!\n*🏢 ${sName}*`;
+
         const p = String(phone).replace(/\D/g, '');
         window.open(`https://api.whatsapp.com/send?phone=91${p}&text=${encodeURIComponent(msg)}`, '_blank');
       },
@@ -1293,9 +1307,14 @@
       },
 
       sendWhatsApp(phone, name, dues) {
-        let msg = `Namaste *${name} ji* 🙏\n\nThis is a polite reminder regarding your outstanding Khata balance at *Jwellers Edith*.\n\n• *Pending Balance Dues:* ₹${Number(dues).toLocaleString('en-IN')}\n`;
-        if (State.shopUpiId) msg += `• *Shop UPI ID:* \`${State.shopUpiId}\`\n`;
-        msg += `\nKindly clear your dues at your earliest convenience.\n\nThank you!\n- *Jwellers Edith*`;
+        const sName = (State.shopName && State.shopName.trim()) ? State.shopName.trim() : 'Jewellers';
+        const contact = State.shopPhone || '';
+        const contactLine = contact ? `\n📞 *संपर्क / Contact:* ${contact}` : '';
+        const upi = State.shopUpiId ? `\n💳 *UPI भुगतान / Payment ID:* \`${State.shopUpiId}\`` : '';
+        const amtStr = Number(dues || 0).toLocaleString('en-IN');
+
+        let msg = `नमस्ते *${name} जी* 🙏\nNamaste *${name} ji* 🙏\n\nयह *${sName}* से आपके खाता शेष (बकाया) के संबंध में एक विनम्र सूचना है।\nThis is a polite reminder regarding your pending Khata balance at *${sName}*.\n\n💰 *कुल बकाया राशि / Pending Balance:* *₹${amtStr}*${upi}\n\nकृपया अपनी सुविधानुसार बकाया राशि का भुगतान करें। यदि आप पहले ही भुगतान कर चुके हैं, तो कृपया इसे अनदेखा करें।\nKindly clear your dues at your earliest convenience. If you have already paid, please ignore this message.${contactLine}\n\nधन्यवाद / Thank you!\n*🏢 ${sName}*`;
+
         const p = String(phone).replace(/\D/g, '');
         window.open(`https://api.whatsapp.com/send?phone=91${p}&text=${encodeURIComponent(msg)}`, '_blank');
       },

@@ -15,33 +15,34 @@ const WhatsAppService = {
     return digits;
   },
 
-  formatKhataReminder(customerName, duesAmount, shopName = 'Jwellers Edith', upiId = '') {
+  formatKhataReminder(customerName, duesAmount, shopName = 'Jewellers', upiId = '', contactPhone = '') {
     const name = customerName ? customerName.trim() : 'Customer';
+    const sName = (shopName && shopName.trim()) ? shopName.trim() : 'Jewellers';
     const amountStr = Number(duesAmount || 0).toLocaleString('en-IN');
+    const contactLine = contactPhone ? `\n📞 *संपर्क / Contact:* ${contactPhone}` : '';
+    const upiLine = upiId ? `\n💳 *UPI भुगतान / Payment ID:* \`${upiId.trim()}\`` : '';
     
-    let msg = `Namaste *${name} ji* 🙏\n\n`;
-    msg += `This is a polite reminder regarding your outstanding Khata balance at *${shopName}*.\n\n`;
-    msg += `• *Pending Balance Dues:* ₹${amountStr}\n`;
-    
-    if (upiId && upiId.trim().length > 0) {
-      msg += `• *Shop UPI ID for Payment:* \`${upiId.trim()}\`\n`;
-    }
-    
-    msg += `\nKindly clear your dues at your earliest convenience. If you have already paid, please ignore this message.\n\n`;
-    msg += `Thank you!\n- *${shopName}*`;
+    let msg = `नमस्ते *${name} जी* 🙏\nNamaste *${name} ji* 🙏\n\n`;
+    msg += `यह *${sName}* से आपके खाता शेष (बकाया) के संबंध में एक विनम्र सूचना है।\nThis is a polite reminder regarding your pending Khata balance at *${sName}*.\n\n`;
+    msg += `💰 *कुल बकाया राशि / Pending Balance:* *₹${amountStr}*${upiLine}\n\n`;
+    msg += `कृपया अपनी सुविधानुसार बकाया राशि का भुगतान करें। यदि आप पहले ही भुगतान कर चुके हैं, तो कृपया इसे अनदेखा करें।\nKindly clear your dues at your earliest convenience. If you have already paid, please ignore this message.${contactLine}\n\n`;
+    msg += `धन्यवाद / Thank you!\n*🏢 ${sName}*`;
     
     return msg;
   },
 
-  formatGirviNotice(customerName, loanNumber, totalDues, shopName = 'Jwellers Edith') {
+  formatGirviNotice(customerName, loanNumber, totalDues, shopName = 'Jewellers', upiId = '', contactPhone = '') {
     const name = customerName ? customerName.trim() : 'Customer';
+    const sName = (shopName && shopName.trim()) ? shopName.trim() : 'Jewellers';
     const amountStr = Number(totalDues || 0).toLocaleString('en-IN');
+    const contactLine = contactPhone ? `\n📞 *संपर्क / Contact:* ${contactPhone}` : '';
+    const upiLine = upiId ? `\n💳 *UPI भुगतान / Payment ID:* \`${upiId.trim()}\`` : '';
 
-    let msg = `Namaste *${name} ji* 🙏\n\n`;
-    msg += `This is a statement regarding your Girvi Pledge ticket *#${loanNumber}* at *${shopName}*.\n\n`;
-    msg += `• *Total Outstanding Balance:* ₹${amountStr}\n`;
-    msg += `\nPlease feel free to contact us or visit the shop for interest payment or redemption.\n\n`;
-    msg += `Thank you!\n- *${shopName}*`;
+    let msg = `नमस्ते *${name} जी* 🙏\nNamaste *${name} ji* 🙏\n\n`;
+    msg += `यह *${sName}* में आपकी गिरवी रसीद *#${loanNumber}* के संबंध में सूचना है।\nThis is a statement regarding your Girvi Pledge ticket *#${loanNumber}* at *${sName}*.\n\n`;
+    msg += `💰 *कुल देय राशि / Total Outstanding:* *₹${amountStr}*${upiLine}\n\n`;
+    msg += `ब्याज जमा करने अथवा गिरवी छुड़ाने हेतु कृपया दुकान पर पधारें या संपर्क करें।\nKindly visit or contact the shop for interest clearance or redemption.${contactLine}\n\n`;
+    msg += `धन्यवाद / Thank you!\n*🏢 ${sName}*`;
 
     return msg;
   },
